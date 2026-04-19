@@ -1,0 +1,24 @@
+---
+const sections: [string, string][] = [
+  ['park', 'The Park'],
+  ['project', 'The Project'],
+  ['demand', 'The Demand'],
+  ['concerns', 'The Concerns'],
+  ['comments', 'The Comments'],
+  ['precedent', 'A Precedent'],
+  ['questions', 'Open Questions'],
+  ['about', 'About'],
+  ['sources', 'Sources'],
+];
+---
+<nav class="nav" aria-label="Section navigation" data-nav>
+  <div class="nav-inner">
+    <a class="nav-mark" href="#top">The Gaffney Park record</a>
+    <div class="nav-chips" data-nav-chips>
+      {sections.map(([id, label]) => (
+        <a href={"#" + id} class="chip" data-section={id}>{label}</a>
+      ))}
+    </div>
+  </div>
+  <div class="nav-progress" aria-hidden="true" data-nav-progress></div>
+</nav>

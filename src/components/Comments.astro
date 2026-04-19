@@ -1,0 +1,182 @@
+---
+import SectionHeading from './SectionHeading.astro';
+
+const COMMENT_GROUPS = [
+  {
+    key: 'substantive',
+    label: 'Substantive',
+    desc: 'Concerns that would exist regardless of which sport was being proposed.',
+    quotes: [
+      { q: "2nd biggest country in the world and you mean to tell me we can't fit a dog park and a cricket pitch in the same city, insane.", src: "CTV News YouTube" },
+      { q: "I don't own a dog but I dont agree with this, keep the dog park.", src: "CTV News YouTube" },
+      { q: "What is the nearest alternative dog park? And what is the nearest alternative cricket pitch?", src: "CTV News YouTube" },
+    ],
+  },
+  {
+    key: 'skeptical',
+    label: 'Skeptical',
+    desc: 'Practical opposition to the trade-off.',
+    quotes: [
+      { q: "I do not support it. We are losing something no one wanted to lose for the sake of accommodation.", src: "CTV News YouTube" },
+    ],
+  },
+  {
+    key: 'cultural',
+    label: 'Cultural',
+    desc: "Frames cricket as culturally foreign without explicit ethnic or national-origin language.",
+    quotes: [
+      { q: "At least play baseball.", src: "CTV News YouTube", note: "3 upvotes" },
+      { q: "Eww cricket.", src: "CTV News YouTube" },
+      { q: "Who they heck playing cricket in canada", src: "CTV News YouTube" },
+    ],
+  },
+  {
+    key: 'coded',
+    label: 'Coded',
+    desc: "Explicit reference to ethnicity, national origin, immigration, or belonging.",
+    quotes: [
+      { q: "And where are these cricket players from? I can only imagine...", src: "CTV News YouTube" },
+      { q: "Look who is behind the Ottawa mayor indians figures Cricket is popular in india", src: "CTV News YouTube" },
+      { q: "No way we're accomodating for foreign interest like this lmaooo", src: "CTV News YouTube" },
+      { q: "This is not India", src: "Reply on Mayor Mark Sutcliffe's public Facebook post" },
+      { q: "Welcome to Canada, hockey dying while Cricket is Canada new sport.", src: "CTV News YouTube" },
+    ],
+  },
+  {
+    key: 'pushback',
+    label: 'Pushback',
+    desc: "Comments from other members of the public countering the above.",
+    quotes: [
+      { q: "You need to educate yourself. Cricket is an English sport. It's official sport of United Kingdom.", src: "CTV News YouTube", note: "13 upvotes — the highest-voted comment on the video" },
+      { q: "If there was no demand, they wouldn't create it. You might not like it but clearly it is a sport thats growing fast.", src: "CTV News YouTube" },
+      { q: "The thinly veiled xenophobia and racism on the manotick Facebook pages about this is astounding.", src: "r/ottawa" },
+    ],
+  },
+];
+---
+<section id="comments">
+  <div class="container">
+    <div class="eyebrow">Section 05 · The Comments</div>
+    <SectionHeading id="comments">Anonymous and semi-anonymous commentary, sorted by <em>what it actually says.</em></SectionHeading>
+    <div class="prose">
+      <p>
+        The section above covers concerns raised on the public record by named residents and in formally constituted petitions. This section covers something different: the anonymous and semi-anonymous comment layer that has attached itself to those concerns across YouTube, Reddit, Facebook, and petition comment threads.
+      </p>
+      <p>
+        The quotes below are verbatim. Categories are assigned based on the language each quote uses — not on assumptions about the commenter.
+      </p>
+    </div>
+
+    <div class="legend-grid">
+      {COMMENT_GROUPS.map((g) => (
+        <div class="legend-cell">
+          <span class={"pill " + g.key}>{g.label}</span>
+          <div class="legend-desc">{g.desc}</div>
+        </div>
+      ))}
+    </div>
+
+    <div class="by-numbers">
+      <h3>By the numbers</h3>
+      <p class="bn-lead">
+        A sample of opposing comments on the CTV News YouTube video <em>&ldquo;Ottawa dog park to become new cricket pitch&rdquo;</em> was classified using the categories above. Of the opposing comments sampled:
+      </p>
+      <ul>
+        <li>
+          <div class="bn-num">40–50%</div>
+          <div>used <strong>Cultural</strong> or <strong>Coded</strong> framing — i.e., invoked the sport's perceived foreignness, or referenced ethnicity, national origin, or immigration.</div>
+        </li>
+        <li>
+          <div class="bn-num">50–60%</div>
+          <div>raised <strong>Substantive</strong> or <strong>Skeptical</strong> concerns about the amenity itself (dog park, trade-off, process).</div>
+        </li>
+        <li>
+          <div class="bn-num">13</div>
+          <div>upvotes on the <strong>highest-voted comment</strong> on the video — which is in the <strong>Pushback</strong> category, a viewer correcting the frame that cricket is a foreign sport. More than any single coded or substantive comment in the thread.</div>
+        </li>
+        <li>
+          <div class="bn-num">Split</div>
+          <div>The pattern is not uniform across platforms. On r/ottawa, a broader-Ottawa forum, opposition comments lean heavily <strong>Substantive</strong>. In Facebook community groups geographically tied to the park, a Reddit commenter observed a very different mix — &ldquo;the thinly veiled xenophobia and racism on the manotick Facebook pages about this is astounding.&rdquo;</div>
+        </li>
+      </ul>
+      <p class="bn-footer">
+        The cultural/coded share of opposition commentary in the CTV video thread has no analogue in comparable amenity disputes this site has reviewed (including the 2022–2023 Manotick pickleball case covered in the next section). Full methodology and the verbatim classification are available in the methodology note at the bottom of this site.
+      </p>
+    </div>
+
+    <div class="filter-bar" role="group" aria-label="Filter comments by category" data-comment-filter>
+      <button type="button" data-filter="all" aria-pressed="true">All</button>
+      {COMMENT_GROUPS.map((g) => (
+        <button type="button" data-filter={g.key} aria-pressed="false">{g.label}</button>
+      ))}
+    </div>
+
+    {COMMENT_GROUPS.map((g) => (
+      <div class="cat-group" data-cat-group={g.key}>
+        <div class="cat-header">
+          <span class={"pill " + g.key}>{g.label}</span>
+          <span class="cat-desc">{g.desc}</span>
+        </div>
+        <div class="quote-list">
+          {g.quotes.map((qu) => (
+            <div class="quote-card">
+              <p class="qtext">&ldquo;{qu.q}&rdquo;</p>
+              <div class="meta">
+                <span class="src-attr">
+                  — <strong>{qu.src}</strong>{qu.note ? ' · ' + qu.note : ''}
+                </span>
+                <span class={"pill " + g.key}>{g.label}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+
+    <div class="section-note">
+      <h4>A note on what these categories mean, and what they don't</h4>
+      <p>
+        Categorizing a comment as <em>Coded</em> is a statement about the language of the comment — not the character of the person who wrote it. A reader can write &ldquo;this is not India&rdquo; for many reasons; the category label reflects how the sentence reads in the public record, nothing more.
+      </p>
+      <p>
+        The <em>Cultural</em> and <em>Coded</em> categories together outnumber the <em>Substantive</em> and <em>Skeptical</em> categories in the YouTube comment section of the CTV News coverage. The top-voted comment on that same video is, however, a <em>Pushback</em> comment. The public discourse is not uniform.
+      </p>
+    </div>
+
+    <div class="section-note" style="margin-top: 24px; background: var(--paper-sunk);">
+      <h4>On what is not quoted here</h4>
+      <p style="margin: 0;">
+        Additional comments consistent with the Coded category appear in Facebook community-group threads and on Mayor Sutcliffe's public Facebook posts. Many of those threads are behind a login wall or have been moderated since posting. Where a verbatim record could not be captured, those comments are <strong>not</strong> reproduced here, even where secondary reporting describes the pattern. This site quotes only what it can source.
+      </p>
+    </div>
+
+    <div class="src">Sources: CTV News YouTube — &ldquo;Ottawa dog park to become new cricket pitch,&rdquo; comment section; r/ottawa — &ldquo;Keep Beryl Gaffney Park as is&rdquo;; Change.org petition comment thread; public Facebook comment threads on community group posts and on public posts by Mayor Mark Sutcliffe.</div>
+  </div>
+</section>
+
+<style>
+  .legend-cell {
+    padding-top: 10px;
+    border-top: 2px solid var(--rideau);
+  }
+  .legend-cell .pill {
+    margin-bottom: 8px;
+    display: inline-block;
+  }
+  .legend-desc {
+    font-family: var(--sans);
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--ink-70);
+    margin-top: 6px;
+  }
+  .bn-footer {
+    font-family: var(--serif);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink-70);
+    margin: 28px 0 0;
+    max-width: 780px;
+  }
+  .cat-group[hidden] { display: none; }
+</style>

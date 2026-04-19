@@ -1,0 +1,121 @@
+---
+---
+<div class="motif motif-park" aria-hidden="true">
+  <canvas data-turtle-motif width="280" height="180"></canvas>
+</div>
+
+<script>
+  function initTurtle(canvas: HTMLCanvasElement) {
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    const W = 280, H = 180;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    ctx.scale(dpr, dpr);
+
+    const start = performance.now();
+    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let rafId = 0;
+
+    function draw(now: number) {
+      if (!ctx) return;
+      const t = (now - start) / 1000;
+      const breath = Math.sin(t * 1.1);
+      const swim = Math.sin(t * 2.2);
+      const swim2 = Math.sin(t * 2.2 + Math.PI);
+      const bobPhase = (t % 5) / 5;
+      const bob = bobPhase < 0.15 ? Math.sin(bobPhase * Math.PI / 0.15) : 0;
+
+      const head = 1 + breath * 0.35 + bob * 0.15;
+      const frontFlip = swim * 28;
+      const backFlip = swim2 * 16;
+      const bodyLift = breath * 1.5;
+      const headTilt = bob * 8 + breath * 3;
+
+      ctx.clearRect(0, 0, W, H);
+      ctx.strokeStyle = '#1C1D1F';
+      ctx.lineWidth = 1.1;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+
+      const cx = W / 2 - 20, cy = H / 2 + 10 - bodyLift;
+
+      ctx.beginPath();
+      ctx.moveTo(cx - 64, cy);
+      ctx.bezierCurveTo(cx - 64, cy - 58, cx + 60, cy - 58, cx + 60, cy);
+      ctx.bezierCurveTo(cx + 60, cy + 8, cx - 64, cy + 8, cx - 64, cy);
+      ctx.stroke();
+
+      ctx.save();
+      ctx.strokeStyle = '#55585D';
+      ctx.lineWidth = 0.7;
+      ctx.beginPath();
+      ctx.moveTo(cx - 40, cy - 28); ctx.lineTo(cx + 38, cy - 30);
+      ctx.stroke();
+      const cols = [-42, -18, 4, 28];
+      cols.forEach(x => {
+        ctx.beginPath();
+        ctx.moveTo(cx + x, cy - 28);
+        ctx.lineTo(cx + x - 2, cy - 2);
+        ctx.stroke();
+      });
+      [-52, -28, -4, 22, 46].forEach(x => {
+        ctx.beginPath();
+        ctx.moveTo(cx + x, cy - 2);
+        ctx.quadraticCurveTo(cx + x, cy + 4, cx + x - 2, cy + 2);
+        ctx.stroke();
+      });
+      ctx.restore();
+
+      const headAnchorX = cx - 64;
+      const headAnchorY = cy - 6;
+      ctx.save();
+      ctx.translate(headAnchorX, headAnchorY);
+      ctx.rotate((headTilt * Math.PI) / 180);
+      const headReach = 16 * head;
+      ctx.beginPath();
+      ctx.moveTo(0, -2);
+      ctx.bezierCurveTo(-headReach + 10, -12, -headReach - 4, 0, -headReach, 8);
+      ctx.bezierCurveTo(-headReach + 2, 16, 6, 10, 0, 8);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(-headReach + 4, 4, 1.2, 0, Math.PI * 2);
+      ctx.fillStyle = '#1C1D1F';
+      ctx.fill();
+      ctx.restore();
+
+      ctx.save();
+      ctx.translate(cx - 38, cy + 4);
+      ctx.rotate((frontFlip * Math.PI) / 180);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.bezierCurveTo(-18, 14, -26, 26, -18, 34);
+      ctx.bezierCurveTo(-10, 30, -4, 14, 0, 0);
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.save();
+      ctx.translate(cx + 40, cy + 4);
+      ctx.rotate((backFlip * Math.PI) / 180);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.bezierCurveTo(12, 12, 18, 22, 10, 28);
+      ctx.bezierCurveTo(4, 22, 0, 12, 0, 0);
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.beginPath();
+      ctx.moveTo(cx + 58, cy - 1);
+      ctx.quadraticCurveTo(cx + 68, cy + 2, cx + 74, cy + 6);
+      ctx.stroke();
+
+      if (!reduced) rafId = requestAnimationFrame(draw);
+    }
+
+    if (reduced) draw(start);
+    else rafId = requestAnimationFrame(draw);
+  }
+
+  document.querySelectorAll<HTMLCanvasElement>('canvas[data-turtle-motif]').forEach(initTurtle);
+</script>

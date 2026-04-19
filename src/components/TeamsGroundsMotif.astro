@@ -1,0 +1,121 @@
+---
+---
+<figure class="motif motif-demand" aria-hidden="true">
+  <canvas data-teams-grounds width="640" height="140"></canvas>
+  <figcaption class="motif-label">Before and after: 40 teams across 6 grounds (today) → 12 grounds (with six new pitches).</figcaption>
+</figure>
+
+<script>
+  function initTeamsGrounds(canvas: HTMLCanvasElement) {
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    const W = 640, H = 140;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    ctx.scale(dpr, dpr);
+
+    const start = performance.now();
+    const groundY = 84;
+    const margin = 30;
+    const innerW = W - margin * 2;
+    const grounds12 = Array.from({length: 12}, (_, i) => margin + (i + 0.5) * (innerW / 12));
+    const grounds6 = Array.from({length: 6}, (_, i) => margin + (i + 0.5) * (innerW / 6));
+
+    const teams: { beforeGround: number; afterGround: number; orbit: number }[] = [];
+    for (let i = 0; i < 40; i++) {
+      teams.push({
+        beforeGround: i % 6,
+        afterGround: i % 12,
+        orbit: (i * 137.5) % 360,
+      });
+    }
+
+    const ease = (x: number) => x < 0.5 ? 4*x*x*x : 1 - Math.pow(-2*x+2, 3)/2;
+    const CYCLE = 10000;
+    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let rafId = 0;
+
+    function draw(now: number) {
+      if (!ctx) return;
+      const elapsed = now - start;
+      const t = (elapsed % CYCLE) / CYCLE;
+      let k: number;
+      if (t < 0.35) k = 0;
+      else if (t < 0.5) k = ease((t - 0.35) / 0.15);
+      else if (t < 0.85) k = 1;
+      else k = 1 - ease((t - 0.85) / 0.15);
+
+      ctx.clearRect(0, 0, W, H);
+
+      ctx.strokeStyle = '#D9D7D0';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(margin, groundY + 18);
+      ctx.lineTo(W - margin, groundY + 18);
+      ctx.stroke();
+
+      ctx.strokeStyle = '#1C1D1F';
+      ctx.lineWidth = 1;
+      for (let i = 0; i < 12; i++) {
+        const isNew = i >= 6;
+        const alpha = isNew ? k : 1;
+        const x = grounds12[i];
+        const baseX = i < 6 ? grounds6[i] + (grounds12[i] - grounds6[i]) * k : x;
+        if (alpha < 0.02) continue;
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.beginPath();
+        ctx.arc(baseX, groundY + 18, 5.5, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(baseX, groundY + 12);
+        ctx.lineTo(baseX, groundY - 2);
+        ctx.strokeStyle = '#D9D7D0';
+        ctx.stroke();
+        ctx.strokeStyle = '#1C1D1F';
+        ctx.restore();
+      }
+
+      ctx.fillStyle = '#3E6B7A';
+      teams.forEach((team, i) => {
+        const beforeGX = grounds6[team.beforeGround] + (grounds12[team.beforeGround] - grounds6[team.beforeGround]) * k;
+        const afterGX = grounds12[team.afterGround];
+        const gx = beforeGX + (afterGX - beforeGX) * k;
+        const r = 8 + (i % 3) * 2.5;
+        const ang = (team.orbit + elapsed * 0.02) * Math.PI / 180;
+        const x = gx + Math.cos(ang) * r;
+        const y = groundY + 18 + Math.sin(ang) * r * 0.5;
+        ctx.beginPath();
+        ctx.arc(x, y, 1.6, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      ctx.font = "600 10px 'Inter', sans-serif";
+      ctx.fillStyle = '#72767C';
+      ctx.textAlign = 'left';
+      const beforeTeams = 40, beforeGrounds = 6;
+      const afterTeams = 40, afterGrounds = 12;
+      const ratio = (beforeTeams / beforeGrounds) + ((afterTeams / afterGrounds) - (beforeTeams / beforeGrounds)) * k;
+      ctx.fillText(`TEAMS PER GROUND:`, margin, 22);
+      ctx.font = "600 18px 'Inter', sans-serif";
+      ctx.fillStyle = '#1C1D1F';
+      ctx.fillText(ratio.toFixed(1), margin + 146, 24);
+      ctx.font = "600 10px 'Inter', sans-serif";
+      ctx.fillStyle = '#72767C';
+      ctx.textAlign = 'right';
+      ctx.fillText('GROUNDS', W - margin, 22);
+      const gCount = beforeGrounds + (afterGrounds - beforeGrounds) * k;
+      ctx.font = "600 18px 'Inter', sans-serif";
+      ctx.fillStyle = '#1C1D1F';
+      ctx.fillText(gCount.toFixed(0), W - margin, 42);
+
+      if (!reduced) rafId = requestAnimationFrame(draw);
+    }
+
+    if (reduced) draw(start);
+    else rafId = requestAnimationFrame(draw);
+  }
+
+  document.querySelectorAll<HTMLCanvasElement>('canvas[data-teams-grounds]').forEach(initTeamsGrounds);
+</script>

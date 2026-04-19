@@ -1,0 +1,63 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import Sidenote from './Sidenote.astro';
+import TeamsGroundsMotif from './TeamsGroundsMotif.astro';
+---
+<section id="demand">
+  <div class="container">
+    <div class="eyebrow">Section 03 · The Demand</div>
+    <SectionHeading id="demand">The case <em>the proponents</em> make.</SectionHeading>
+    <div class="prose">
+      <p>
+        Cricket is the fastest-growing sport by participation in Canada. Cricket Canada counts approximately 38,186 registered players today.<Sidenote n={4}>Cricket Canada registration figures, 2024 season filing.</Sidenote> Federal and Cricket Canada projections point to more than 500,000 players by 2033.<Sidenote n={5}>Cricket Canada strategic plan and federal Sport Canada projections; cited in CBC News, &ldquo;Ottawa cricket fans make pitch for new places to play,&rdquo; May 2021.</Sidenote>
+      </p>
+      <p>
+        Canadian cricket is not new. The country's national governing body was established in 1892. The sport has been played on what is now Canadian soil since 1785.<Sidenote n={6}>Cricket Canada organizational history; the 1785 date refers to the first documented match on what is now Canadian territory and is cited in multiple Canadian cricket histories.</Sidenote>
+      </p>
+    </div>
+
+    <div class="fact-strip">
+      <div class="fact"><div class="num big">40</div><div class="lbl">Teams in Ottawa</div></div>
+      <div class="fact"><div class="num big">6</div><div class="lbl">Grounds currently available</div></div>
+      <div class="fact"><div class="num big">500,000</div><div class="lbl">Projected Canadian players by 2033</div></div>
+    </div>
+
+    <TeamsGroundsMotif />
+
+    <div class="prose" style="margin-top: 40px;">
+      <p>In Ottawa specifically:</p>
+      <ul class="bullet-list">
+        <li>Roughly 40 teams currently share 6 grounds.<Sidenote n={7}>Ottawa Sports Pages coverage of the Ontario Central T20, July 2025, reporting on Ottawa Valley Cricket Council team counts and available grounds.</Sidenote></li>
+        <li>The Ottawa Valley Cricket Council administers 24 of those teams.</li>
+        <li>The Barrhaven Cricket Club was founded in 2021.</li>
+        <li>The Kanata Cricket Club was founded in 2022.</li>
+        <li>Monarch Cricket, the city's first dedicated indoor cricket venue, opened in 2021.</li>
+      </ul>
+      <p>
+        Ottawa's South Asian population — one of several communities with strong cultural ties to cricket — grew from 26,640 residents in 2005 to 40,725 in 2016, a 53% increase over eleven years. Canadian cricket participation has historically tracked immigration from Commonwealth countries where the sport is common.
+      </p>
+      <p>
+        With six new pitches in place, Ottawa's ratio of cricket teams to grounds would move from roughly 6.7 teams per ground to roughly 3.3. For comparison, the City of Toronto maintains a dedicated Cricket Strategy.
+      </p>
+    </div>
+
+    <blockquote style="margin-top: 48px;">
+      Cricket's Canadian governing body dates to 1892. The sport has been played in Canada since 1785.
+    </blockquote>
+
+    <div class="src">Sources: Cricket Canada; CBC News, &ldquo;Ottawa cricket fans make pitch for new places to play,&rdquo; May 2021; Statistics Canada census data; Ottawa Sports Pages, OVCC at Ontario Central T20, July 2025; Ottawa Valley Cricket Council; Barrhaven Cricket Club; Kanata Cricket Club; Monarch Cricket; City of Toronto Cricket Strategy.</div>
+  </div>
+</section>
+
+<style>
+  .bullet-list {
+    font-family: var(--serif);
+    font-size: var(--fz-body);
+    line-height: 1.7;
+    margin: 0 0 24px;
+    padding-left: 24px;
+    color: var(--ink);
+    max-width: var(--measure-prose);
+  }
+  .bullet-list li { margin-bottom: 6px; }
+</style>

@@ -1,0 +1,183 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import Sidenote from './Sidenote.astro';
+import PaddleBatMotif from './PaddleBatMotif.astro';
+
+const ampticks = [
+  { x: 0,   label: '2018' },
+  { x: 25,  label: '2020' },
+  { x: 50,  label: '2022' },
+  { x: 75,  label: '2024' },
+  { x: 100, label: '2026' },
+];
+---
+<section id="precedent">
+  <div class="container precedent-inner">
+    <PaddleBatMotif />
+    <div class="eyebrow">Section 06 · A Precedent</div>
+    <SectionHeading id="precedent">Manotick and pickleball, <em>2018–2023.</em></SectionHeading>
+    <div class="prose">
+      <p>
+        The same community has organized against a park amenity before. The way that precedent played out is a useful check on any reading of the current opposition as reducible to one cause.
+      </p>
+    </div>
+
+    <h3 class="sub-h">The pickleball case</h3>
+    <div class="prose">
+      <p>
+        In 2018, the Manotick Tennis Club converted one tennis court at Centennial Park into four pickleball courts.<Sidenote n={8}>Manotick Messenger, &ldquo;Noise Complaints Leave Pickleball Players With No Place To Play,&rdquo; 2023; corroborated by CBC News coverage of the Ottawa pickleball noise debate.</Sidenote> Pickleball membership in the area grew to approximately 825 players.
+      </p>
+      <p>
+        Between 2020 and 2023, organized opposition formed around noise. One neighbour characterized pickleball paddles as &ldquo;about 10 times as loud as tennis.&rdquo; Opposition was accompanied by sound-level measurements and a petition.
+      </p>
+      <p>
+        A 2022 public consultation on the issue recorded 53% support for expansion and 38% describing noise as a serious concern.
+      </p>
+      <p>
+        In 2023, the City determined that outdoor pickleball at Centennial Park would no longer be permitted.<Sidenote n={9}>Ottawa Express coverage of the Centennial Park pickleball consultation outcome, 2023.</Sidenote> Displaced players were directed to indoor facilities and to Alfred Taylor Park in North Gower.
+      </p>
+    </div>
+
+    <div class="ribbon-wrap wide">
+      <div class="ribbon">
+        <div class="ribbon-axis"></div>
+        {ampticks.map((t) => (
+          <>
+            <div class="ribbon-tick" style={`left: ${t.x}%`}></div>
+            <div class="ribbon-label" style={`left: ${t.x}%`}>{t.label}</div>
+          </>
+        ))}
+        <div class="ribbon-bar ribbon-bar-pickle">Pickleball · 2018–2023</div>
+        <div class="ribbon-bar ribbon-bar-cricket">Cricket · 2025–</div>
+      </div>
+    </div>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="c-label">Pickleball 2018–2023</div>
+        <h3>Manotick, Centennial Park</h3>
+        <dl>
+          <div><dt>Amenity</dt><dd>Four pickleball courts converted from one tennis court.</dd></div>
+          <div><dt>Opposition basis</dt><dd>Noise. Sound-level readings taken. Petition circulated.</dd></div>
+          <div><dt>Consultation</dt><dd>2022 public consultation: 53% support for expansion; 38% described noise as a serious concern.</dd></div>
+          <div><dt>Outcome</dt><dd>2023 — outdoor pickleball at Centennial Park no longer permitted. Players directed to indoor facilities and Alfred Taylor Park.</dd></div>
+        </dl>
+      </div>
+      <div class="compare-card">
+        <div class="c-label">Cricket 2025–2026</div>
+        <h3>Beryl Gaffney Park</h3>
+        <dl>
+          <div><dt>Amenity</dt><dd>One regulation cricket pitch, ≈1.5 ha of a 39 ha park.</dd></div>
+          <div><dt>Opposition basis</dt><dd>Dog-park preservation; turtle habitat; traffic; consultation adequacy.</dd></div>
+          <div><dt>Consultation</dt><dd>Engage Ottawa. Comment period closed March 11, 2026. &ldquo;What We Learned&rdquo; report completed.</dd></div>
+          <div><dt>Outcome</dt><dd>Pending.</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <h3 class="sub-h" style="margin-top: 48px;">The point of drawing the comparison</h3>
+    <div class="prose">
+      <p>Manotick is not a community without a track record of opposing park amenities. In the pickleball case:</p>
+      <ul class="bullet-list">
+        <li>The amenity was not associated with any particular ethnic or cultural community.</li>
+        <li>The opposition was measurable. Sound readings were taken. Consultation occurred. The community made a reasoned case for a specific impact.</li>
+        <li>The opposition won.</li>
+      </ul>
+      <p>
+        Several of the concerns raised about the cricket pitch — dog-park preservation, turtle habitat, traffic, consultation adequacy — belong in the same category as the pickleball concerns. They are the concerns a community is entitled to raise about any change to a park, whatever the amenity.
+      </p>
+      <p>
+        What the pickleball precedent does not explain is the second layer present in the cricket-pitch opposition: the <em>Cultural</em> and <em>Coded</em> categories in the section above. There was no parallel layer in the pickleball record. The comment threads about pickleball did not ask where the players were from, did not invoke foreign countries, and did not frame the amenity as an accommodation of outside interests.
+      </p>
+      <p>
+        Put plainly: the <em>concerns</em> about the cricket pitch are concerns that could, and sometimes do, accompany any park amenity change in this community. The <em>commentary</em> around the cricket pitch is not. Remove the Cultural and Coded comment layers from the cricket-pitch opposition, and what remains is the pickleball case — reasoned amenity concerns, legitimate consultation questions, an organized neighbourhood getting what it wants.
+      </p>
+    </div>
+
+    <blockquote class="hinge">
+      What distinguishes the two cases is not the concerns. It is what is being said alongside them, and about whom.
+    </blockquote>
+
+    <div class="src">Sources: CBC News — &ldquo;The pickleball noise debate has landed in Ottawa&rdquo;; Manotick Messenger — &ldquo;Noise Complaints Leave Pickleball Players With No Place To Play,&rdquo; 2023; Ottawa Express coverage of Centennial Park pickleball consultation; CTV News regional coverage.</div>
+  </div>
+</section>
+
+<style>
+  .sub-h {
+    font-family: var(--sans);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 32px 0 16px;
+    letter-spacing: -0.01em;
+  }
+  .bullet-list {
+    font-family: var(--serif);
+    font-size: var(--fz-body);
+    line-height: 1.7;
+    margin: 0 0 24px;
+    padding-left: 24px;
+    color: var(--ink);
+    max-width: var(--measure-prose);
+  }
+  .bullet-list li { margin-bottom: 6px; }
+  .ribbon-wrap {
+    margin: 32px 0 12px;
+  }
+  .ribbon {
+    position: relative;
+    height: 112px;
+    border-top: 1px solid var(--ink-15);
+    border-bottom: 1px solid var(--ink-15);
+    padding: 16px 0;
+  }
+  .ribbon-axis {
+    position: absolute;
+    left: 0; right: 0; top: 60px;
+    height: 1px;
+    background: var(--ink-15);
+  }
+  .ribbon-tick {
+    position: absolute;
+    top: 56px;
+    width: 1px;
+    height: 8px;
+    background: var(--ink-40);
+  }
+  .ribbon-label {
+    position: absolute;
+    top: 68px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-60);
+    transform: translateX(-50%);
+  }
+  .ribbon-bar {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--paper);
+    height: 22px;
+  }
+  .ribbon-bar-pickle {
+    left: 0;
+    width: 62.5%;
+    top: 20px;
+    background: var(--viz-3);
+  }
+  .ribbon-bar-cricket {
+    left: 87.5%;
+    width: 12.5%;
+    top: 88px;
+    background: var(--viz-5);
+    padding: 0 10px;
+  }
+  @media (max-width: 560px) {
+    .ribbon-bar { font-size: 10px; padding: 0 8px; }
+    .ribbon-label { font-size: 10px; }
+  }
+</style>

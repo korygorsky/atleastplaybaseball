@@ -1,0 +1,54 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import Sidenote from './Sidenote.astro';
+---
+<section id="project">
+  <div class="container">
+    <div class="eyebrow">Section 02 · The Project</div>
+    <SectionHeading id="project">What <em>is</em> being proposed.</SectionHeading>
+    <div class="prose">
+      <p>
+        The City of Ottawa has proposed building a regulation cricket pitch at Beryl Gaffney Park. The published scope includes:
+      </p>
+      <ul class="bullet-list">
+        <li>A 100-metre by 125-metre playing field, with an additional 10-metre run-out.<Sidenote n={2}>Dimensions published on the Engage Ottawa project page for the Beryl Gaffney Park cricket pitch consultation.</Sidenote></li>
+        <li>A relocated stone-dust pathway through the affected area.</li>
+        <li>A chain-link fence separating pedestrians from the field of play.</li>
+        <li>A shaded, accessible picnic area.</li>
+        <li>Foundation work to support a future equipment-storage shed.</li>
+      </ul>
+      <p>
+        The pitch is to be built on &ldquo;the field closest to the parking lot.&rdquo; The public consultation ran on Engage Ottawa and closed on March 11, 2026. The City has completed a &ldquo;What We Learned&rdquo; report summarizing the input received.
+      </p>
+      <p>
+        Beryl Gaffney is one of several sites in a city-wide program. The City has committed to up to six cricket pitches<Sidenote n={3}>CTV News Ottawa, &ldquo;City of Ottawa planning to create up to 6 new cricket pitches,&rdquo; March 5, 2026; corroborated by Councillor Wilson Lo's February 24, 2025 newsletter.</Sidenote> across Ottawa. Announced or confirmed sites include Bradley-Craig Park and a second location in Stittsville, Beryl Gaffney in Nepean, and François Dupuis Recreation Centre in Orléans.
+      </p>
+      <p>
+        Mayor Mark Sutcliffe has described the program as a response to &ldquo;the growing population of cricket players.&rdquo; Councillor Wilson Lo (Barrhaven East), the ward councillor, has encouraged residents to participate in the consultation.
+      </p>
+    </div>
+
+    <div class="fact-strip cols-5">
+      <div class="fact"><div class="num">100&thinsp;×&thinsp;125 m</div><div class="lbl">Pitch dimensions</div></div>
+      <div class="fact"><div class="num">≈4%</div><div class="lbl">Of the park</div></div>
+      <div class="fact"><div class="num">6</div><div class="lbl">Pitches citywide</div></div>
+      <div class="fact"><div class="num">Mar 11</div><div class="lbl">Consultation closed, 2026</div></div>
+      <div class="fact"><div class="num">40 / 6</div><div class="lbl">Teams share 6 grounds today</div></div>
+    </div>
+
+    <div class="src">Sources: Engage Ottawa — Beryl Gaffney cricket pitch project page; CTV News, &ldquo;City of Ottawa planning to create up to 6 new cricket pitches,&rdquo; March 5, 2026; Councillor Wilson Lo, weekly newsletters dated February 24, 2025 and March 11, 2026; Councillor Glen Gower, Stittsville ward communications.</div>
+  </div>
+</section>
+
+<style>
+  .bullet-list {
+    font-family: var(--serif);
+    font-size: var(--fz-body);
+    line-height: 1.6;
+    margin: 0 0 24px;
+    padding-left: 24px;
+    color: var(--ink);
+    max-width: var(--measure-prose);
+  }
+  .bullet-list li { margin-bottom: 6px; }
+</style>

@@ -1,0 +1,111 @@
+---
+import SectionHeading from './SectionHeading.astro';
+
+const CONCERNS = [
+  {
+    head: "\u201CThe pitch eliminates the dog park.\u201D",
+    body: "The pitch footprint is approximately 1.5 hectares — roughly 4% of the 39-hectare park. The remaining area continues to support the off-leash function the park is currently used for. The published project scope does not formally close or re-designate the park's off-leash use.",
+    verdictLabel: "Overstated",
+    verdictBody: "The pitch occupies a small share of the park. Off-leash use of the remaining area is not formally eliminated by the project as scoped.",
+    dot: "green",
+  },
+  {
+    head: "\u201CWe are losing a distinctive piece of off-leash space.\u201D",
+    body: "The City of Ottawa operates 153 off-leash dog areas. In the south end, at least eight alternatives exist within driving distance of Beryl Gaffney. However, Beryl Gaffney's particular combination — 96 acres with direct Rideau River water access — is genuinely uncommon in Ottawa. The alternatives are not equivalent in scale or character.",
+    verdictLabel: "Partially valid",
+    verdictBody: "The raw supply of off-leash space is not the issue; the loss of this particular combination of size and river access is real.",
+    dot: "amber",
+  },
+  {
+    head: "\u201CTurtles and species at risk will be harmed.\u201D",
+    body: "Three turtle species native to the Ottawa area are on Ontario's Species at Risk list: Midland Painted, Snapping, and Blanding's. Blanding's Turtle is listed as threatened both provincially and federally. Beryl Gaffney borders the Rideau River, which is known habitat for these species. Sandy banks of the kind found in the park are typical turtle nesting ground. No Species at Risk assessment specific to the cricket pitch footprint has been publicly released as of the date of this site. A formal consultation with the Rideau Valley Conservation Authority has likewise not been surfaced in the public record.",
+    verdictLabel: "Legitimate. Under-documented",
+    verdictBody: "The concern is grounded in the biology of the site and the pitch footprint's location. A public Species at Risk assessment should form part of the project record.",
+    dot: "grey",
+  },
+  {
+    head: "\u201CTraffic on Rideau Valley Drive will become unsafe.\u201D",
+    body: "Rideau Valley Drive is a rural two-lane road with limited shoulders outside the park entrance. The park has two existing parking lots. No public traffic counts, road-classification data, or traffic impact assessment specific to the cricket pitch have surfaced in the public record.",
+    verdictLabel: "A reasonable question without public data to answer it",
+    verdictBody: "A traffic impact assessment should form part of the project record.",
+    dot: "grey",
+  },
+  {
+    head: "\u201CThere was not enough public consultation.\u201D",
+    body: "The project was posted on Engage Ottawa. The formal public comment period closed on March 11, 2026. A \u201CWhat We Learned\u201D report has been completed. The 2008 Beryl Gaffney master-plan update — which introduced the existing softball field — was consulted on in a comparable way, including an open house at the RVCA building on Rideau Valley Drive.",
+    verdictLabel: "Consultation occurred on the public record",
+    verdictBody: "Whether the consultation was sufficient is a judgement on which residents can reasonably disagree.",
+    dot: "amber",
+  },
+];
+---
+<section id="concerns">
+  <div class="container">
+    <div class="eyebrow">Section 04 · The Concerns</div>
+    <SectionHeading id="concerns">Opposition has organized around <em>five specific concerns.</em></SectionHeading>
+    <div class="prose">
+      <p>
+        Opposition to the Beryl Gaffney cricket pitch has organized around five specific concerns. Each is treated here on its merits, with a note on where the public evidence stands.
+      </p>
+    </div>
+
+    <div class="concerns-grid">
+      {CONCERNS.map((c) => (
+        <article class="concern-card">
+          <div class="c-head">{c.head}</div>
+          <p class="c-body"><strong>What the evidence shows</strong>{c.body}</p>
+          <div class="c-verdict">
+            <span class={"v-dot " + c.dot} aria-hidden="true"></span>
+            <div>
+              <span class="v-label">Verdict · {c.verdictLabel}</span>
+              <div class="v-body">{c.verdictBody}</div>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <div class="named-residents">
+      <h4>Residents who raised concerns on the record</h4>
+      <p class="nr-lead">
+        Three residents are quoted by name in CTV News coverage of the project. Each is raising one of the concerns above and is treated here in that frame only:
+      </p>
+      <ul>
+        <li><strong>Beth Landstrom</strong> — concerns about loss of green space and off-leash dog area.</li>
+        <li><strong>Karen Doughan</strong> — concerns about loss of green space and off-leash dog area.</li>
+        <li><strong>Debbie Prescott</strong> — concerns about traffic safety on Rideau Valley Drive.</li>
+      </ul>
+      <p class="nr-note">
+        None of the named residents used ethnic, national-origin, or immigration-related framing on the record. Their public statements fall within the five concerns treated above.
+      </p>
+    </div>
+
+    <div class="src">Sources: City of Ottawa Off-Leash Dog Park directory; Canadian Wildlife Federation; Ontario Ministry of Environment, Conservation and Parks — Species at Risk list; Rideau Valley Conservation Authority; Engage Ottawa — Beryl Gaffney Park project page; CTV News coverage of the proposal.</div>
+  </div>
+</section>
+
+<style>
+  .v-body {
+    margin-top: 6px;
+    font-family: var(--serif);
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink-80);
+  }
+  .nr-lead {
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--ink-80);
+    margin: 0 0 16px;
+    max-width: 720px;
+  }
+  .nr-note {
+    font-family: var(--serif);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink-70);
+    margin: 0;
+    max-width: 720px;
+  }
+</style>

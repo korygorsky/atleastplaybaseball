@@ -1,0 +1,52 @@
+---
+import SectionHeading from './SectionHeading.astro';
+
+const QUESTIONS = [
+  {
+    head: "Has the City commissioned a Species at Risk assessment specific to the cricket pitch footprint?",
+    body: "Three turtle species on the Ontario Species at Risk list are native to the Rideau watershed that borders the park. The project scope includes grading, fencing, and a new pathway in an area adjacent to known nesting habitat. An assessment should exist; if it does, it has not been posted to Engage Ottawa.",
+  },
+  {
+    head: "What are the current traffic counts on Rideau Valley Drive, and what is the projected change during weekend match play?",
+    body: "The road outside the park is a two-lane rural route with limited shoulders. One of the named residents quoted by CTV News raised this concern on the record. A traffic impact assessment does not appear to have been publicly released.",
+  },
+  {
+    head: "What is the exact acreage of designated off-leash space in Beryl Gaffney Park before and after the project?",
+    body: "\u201CThe park remains 96% available for off-leash use\u201D is only accurate if the current off-leash designation covers the whole park. A published before-and-after acreage would settle that question definitively.",
+  },
+  {
+    head: "Will the Rideau Valley Conservation Authority be formally consulted on the project?",
+    body: "The park borders the Rideau River and falls within the RVCA's regulated area for floodplain and riparian matters. The RVCA is headquartered next to Beryl Gaffney Park. A public record of that consultation has not been surfaced.",
+  },
+  {
+    head: "Is there a published schedule for the pitch's operating hours and seasonal use?",
+    body: "Operating hours affect whether the remaining off-leash use in the park is disrupted, and whether evening or weekend use will generate the traffic concerns referenced in question 2. A schedule would also clarify whether the pitch is intended for league play, casual use, or both.",
+  },
+  {
+    head: "Has the City's consultation record acknowledged the distinct categories of commentary about this project?",
+    body: "The \u201CWhat We Learned\u201D report summarizing the March 11, 2026 consultation has been completed. It is a question for the public consultation record, and for the Councillor's office, whether the commentary around this specific project — documented in Section 5 of this site — has been characterized to the City's satisfaction, and whether any response to that characterization is planned.",
+  },
+];
+---
+<section id="questions">
+  <div class="container">
+    <div class="eyebrow">Section 07 · Open Questions</div>
+    <SectionHeading id="questions">Six questions, <em>unanswered</em> in the public record.</SectionHeading>
+    <div class="prose">
+      <p>
+        Several questions about the Beryl Gaffney cricket pitch project and its surrounding discourse remain unanswered in the public record. They are collected here so that the next stage of consultation, reporting, or municipal review has a place to start.
+      </p>
+    </div>
+    <ol class="q-list">
+      {QUESTIONS.map((q) => (
+        <li>
+          <div>
+            <h3 class="q-head">{q.head}</h3>
+            <p class="q-body">{q.body}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+    <div class="src" style="margin-top: 24px;"><em>This site will be updated as these questions are answered.</em></div>
+  </div>
+</section>

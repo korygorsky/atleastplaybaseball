@@ -1,0 +1,147 @@
+---
+---
+<div class="motif motif-precedent" aria-hidden="true">
+  <canvas data-paddle-bat width="260" height="240"></canvas>
+</div>
+
+<script>
+  function initPaddleBat(canvas: HTMLCanvasElement) {
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    const W = 260, H = 240;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    ctx.scale(dpr, dpr);
+
+    const start = performance.now();
+    const cx = W / 2, cy = H / 2 + 10;
+    const N = 160;
+
+    function paddlePoint(t: number): [number, number] {
+      const handleHalfW = 8, handleHeight = 50;
+      const headR = 44;
+      const handleBottomY = cy + 80;
+      const headCenterY = cy + 80 - handleHeight - headR + 8;
+      if (t < 0.05) {
+        const u = t / 0.05;
+        return [cx + (u - 0.5) * 2 * handleHalfW, handleBottomY];
+      }
+      if (t < 0.2) {
+        const u = (t - 0.05) / 0.15;
+        return [cx + handleHalfW, handleBottomY - u * handleHeight];
+      }
+      if (t < 0.8) {
+        const u = (t - 0.2) / 0.6;
+        const ang = -Math.PI / 2 + u * (Math.PI * 2 - 0.6) + 0.3;
+        return [cx + Math.sin(ang) * headR, headCenterY - Math.cos(ang) * headR];
+      }
+      if (t < 0.95) {
+        const u = (t - 0.8) / 0.15;
+        return [cx - handleHalfW, handleBottomY - (1 - u) * handleHeight];
+      }
+      const u = (t - 0.95) / 0.05;
+      return [cx - handleHalfW + u * handleHalfW * 2 * 0.5 - handleHalfW * 0.5, handleBottomY];
+    }
+
+    function batPoint(t: number): [number, number] {
+      const handleHalfW = 5, handleHeight = 70;
+      const bladeHalfW = 20, bladeHeight = 96;
+      const bladeBottomY = cy + 92;
+      const bladeTopY = bladeBottomY - bladeHeight;
+      const handleTopY = bladeTopY - handleHeight;
+      if (t < 0.04) {
+        const u = t / 0.04;
+        return [cx + (u - 0.5) * 2 * handleHalfW, handleTopY];
+      }
+      if (t < 0.22) {
+        const u = (t - 0.04) / 0.18;
+        return [cx + handleHalfW, handleTopY + u * handleHeight];
+      }
+      if (t < 0.28) {
+        const u = (t - 0.22) / 0.06;
+        return [cx + handleHalfW + u * (bladeHalfW - handleHalfW), bladeTopY];
+      }
+      if (t < 0.45) {
+        const u = (t - 0.28) / 0.17;
+        return [cx + bladeHalfW, bladeTopY + u * (bladeHeight - 10)];
+      }
+      if (t < 0.55) {
+        const u = (t - 0.45) / 0.10;
+        const ang = -Math.PI / 2 + u * Math.PI;
+        return [cx + Math.cos(ang) * bladeHalfW + 0, bladeBottomY - 10 + Math.sin(ang) * 10];
+      }
+      if (t < 0.72) {
+        const u = (t - 0.55) / 0.17;
+        return [cx - bladeHalfW, bladeBottomY - 10 - u * (bladeHeight - 10)];
+      }
+      if (t < 0.78) {
+        const u = (t - 0.72) / 0.06;
+        return [cx - bladeHalfW - u * (handleHalfW - bladeHalfW), bladeTopY];
+      }
+      if (t < 0.96) {
+        const u = (t - 0.78) / 0.18;
+        return [cx - handleHalfW, bladeTopY - u * handleHeight];
+      }
+      const u = (t - 0.96) / 0.04;
+      return [cx - handleHalfW + u * handleHalfW, handleTopY];
+    }
+
+    const paddlePath: [number, number][] = [];
+    const batPath: [number, number][] = [];
+    for (let i = 0; i < N; i++) {
+      const t = i / N;
+      paddlePath.push(paddlePoint(t));
+      batPath.push(batPoint(t));
+    }
+
+    const ease = (x: number) => x < 0.5 ? 4*x*x*x : 1 - Math.pow(-2*x+2, 3)/2;
+    const CYCLE = 12000;
+    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let rafId = 0;
+
+    function draw(now: number) {
+      if (!ctx) return;
+      const elapsed = now - start;
+      const t = (elapsed % CYCLE) / CYCLE;
+      let k: number;
+      if (t < 0.35) k = 0;
+      else if (t < 0.5) k = ease((t - 0.35) / 0.15);
+      else if (t < 0.85) k = 1;
+      else k = 1 - ease((t - 0.85) / 0.15);
+
+      ctx.clearRect(0, 0, W, H);
+      ctx.strokeStyle = '#1C1D1F';
+      ctx.lineWidth = 1.2;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      for (let i = 0; i < N; i++) {
+        const a = paddlePath[i], b = batPath[i];
+        const x = a[0] + (b[0] - a[0]) * k;
+        const y = a[1] + (b[1] - a[1]) * k;
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.stroke();
+
+      ctx.font = "600 9px 'Inter', sans-serif";
+      ctx.fillStyle = '#72767C';
+      ctx.textAlign = 'center';
+      const paddleA = 1 - k, batA = k;
+      ctx.save();
+      ctx.globalAlpha = paddleA;
+      ctx.fillText('PICKLEBALL · 2018\u20132023', cx, H - 10);
+      ctx.globalAlpha = batA;
+      ctx.fillText('CRICKET · 2025\u2013', cx, H - 10);
+      ctx.restore();
+
+      if (!reduced) rafId = requestAnimationFrame(draw);
+    }
+
+    if (reduced) draw(start);
+    else rafId = requestAnimationFrame(draw);
+  }
+
+  document.querySelectorAll<HTMLCanvasElement>('canvas[data-paddle-bat]').forEach(initPaddleBat);
+</script>

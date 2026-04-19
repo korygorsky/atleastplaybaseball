@@ -1,0 +1,15 @@
+---
+interface Props {
+  id: string;
+}
+const { id } = Astro.props;
+---
+<div class="h2-wrap">
+  <h2><slot /></h2>
+  <a
+    class="h2-permalink"
+    href={"#" + id}
+    data-permalink={id}
+    aria-label="Copy link to this section"
+  >§ copy link</a>
+</div>

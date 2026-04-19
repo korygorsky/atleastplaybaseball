@@ -1,0 +1,42 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import Sidenote from './Sidenote.astro';
+import TurtleMotif from './TurtleMotif.astro';
+---
+<section id="park">
+  <div class="container park-inner">
+    <TurtleMotif />
+    <div class="eyebrow">Section 01 · The Park</div>
+    <SectionHeading id="park">Beryl Gaffney Park, <em>39 hectares</em> along the Rideau.</SectionHeading>
+    <div class="prose">
+      <p>
+        Beryl Gaffney Park sits at 3889 Rideau Valley Drive, on the border of Nepean and Manotick, along the Rideau River. At 39 hectares — roughly 96 acres<Sidenote n={1}>City of Ottawa parks directory and the 2008 Beryl Gaffney Park Master Plan Update; acreage figures cross-verified against City GIS records.</Sidenote> — it is one of the largest parks in south Ottawa.
+      </p>
+      <p>
+        The park is used for walking, cycling, informal sports, off-leash dog recreation, and river access. It is also wildlife habitat. The sandy banks near the Rideau are known nesting ground for turtle species native to the watershed, including species currently listed as at risk in Ontario.
+      </p>
+      <p>
+        The park opened in its current configuration in the late 1990s. A 2008 master-plan update added a softball field on the south side of the property. That 2008 consultation is a relevant precedent: a ball diamond was added to Beryl Gaffney without the level of public opposition now surrounding the cricket pitch.
+      </p>
+    </div>
+
+    <figure class="map-figure">
+      <svg viewBox="0 0 960 320" width="100%" style="display: block;" xmlns="http://www.w3.org/2000/svg" aria-label="Schematic of park boundary with pitch footprint overlay">
+        <path d="M60,70 Q180,20 360,50 L640,30 Q820,60 900,110 L880,230 Q760,290 560,280 L340,290 Q160,280 80,230 Z"
+              fill="#D7DFE3" stroke="#2D4F5B" stroke-width="1.5"/>
+        <rect x="460" y="150" width="110" height="46" fill="#2D4F5B" opacity="0.88"/>
+        <line x1="515" y1="173" x2="660" y2="250" stroke="#1C1D1F" stroke-width="1"/>
+        <circle cx="515" cy="173" r="2.5" fill="#1C1D1F"/>
+        <text x="668" y="254" font-family="Inter, sans-serif" font-size="13" fill="#1C1D1F" font-weight="600">~1.5 ha pitch footprint</text>
+        <text x="140" y="110" font-family="Inter, sans-serif" font-size="12" fill="#1C1D1F" opacity="0.6">Rideau River ↗</text>
+      </svg>
+      <div class="map-legend">
+        <div class="li"><div class="dot" style="background:#D7DFE3"></div>Park boundary · ~39 ha</div>
+        <div class="li"><div class="dot" style="background:#2D4F5B"></div>Proposed pitch · ~1.5 ha</div>
+      </div>
+      <figcaption>The proposed pitch occupies roughly 4% of the park.</figcaption>
+    </figure>
+
+    <div class="src">Sources: Engage Ottawa — Beryl Gaffney Park project page; Beryl Gaffney Park Master Plan Update, 2008 (City of Ottawa committee record); City of Ottawa parks directory.</div>
+  </div>
+</section>

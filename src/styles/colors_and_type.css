@@ -8,30 +8,30 @@
 
 :root {
   /* ---------- Color · Neutrals ---------- */
-  --paper:         #F7F5F0;  /* background — warm off-white */
-  --paper-sunk:    #EFEBE2;  /* card wells, fact-strip bg */
-  --ink:           #1C1D1F;  /* body text — charcoal */
+  --paper:         #F7F5F0;
+  --paper-sunk:    #EFEBE2;
+  --ink:           #1C1D1F;
   --ink-80:        #3A3C40;
-  --ink-70:        #55585D;  /* captions */
-  --ink-60:        #72767C;  /* eyebrows, credits */
+  --ink-70:        #55585D;
+  --ink-60:        #686C72;  /* darkened for AAA contrast on paper */
   --ink-40:        #A6AAB0;
-  --ink-15:        #D9D7D0;  /* hairlines */
-  --ink-08:        #E8E5DD;  /* soft fills */
-  --ink-05:        #F0EDE5;  /* hover wash */
+  --ink-15:        #D9D7D0;
+  --ink-08:        #E8E5DD;
+  --ink-05:        #F0EDE5;
 
   /* ---------- Color · Accent (Rideau) ---------- */
-  --rideau:        #3E6B7A;  /* primary accent */
-  --rideau-deep:   #2D4F5B;  /* hover for links */
-  --rideau-wash:   #E4ECEF;  /* selection, active-chip bg */
+  --rideau:        #3E6B7A;
+  --rideau-deep:   #2D4F5B;
+  --rideau-wash:   #E4ECEF;
 
   /* ---------- Color · Category pills (cool palette) ---------- */
   --pill-substantive-fg: #2D4F5B;  --pill-substantive-bg: #E4ECEF;
   --pill-skeptical-fg:   #3A4A57;  --pill-skeptical-bg:   #E2E6EA;
   --pill-cultural-fg:    #4A5D44;  --pill-cultural-bg:    #E4EADF;
-  --pill-coded-fg:       #7A5828;  --pill-coded-bg:       #F1E6CE; /* muted amber, never red */
+  --pill-coded-fg:       #7A5828;  --pill-coded-bg:       #F1E6CE;
   --pill-pushback-fg:    #5A544A;  --pill-pushback-bg:    #E9E5DD;
 
-  /* ---------- Color · Data viz ramp (cool, 5 steps) ---------- */
+  /* ---------- Color · Data viz ramp ---------- */
   --viz-1: #D7DFE3;
   --viz-2: #A9BBC2;
   --viz-3: #7A98A3;
@@ -44,31 +44,32 @@
   --sans:            'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   --mono:            'JetBrains Mono', ui-monospace, Menlo, monospace;
 
-  /* ---------- Type · Scale ---------- */
-  --fz-eyebrow:   12px;   /* uppercase tracked labels */
-  --fz-caption:   14px;   /* image captions, source lines */
+  /* ---------- Type · Fluid scale ----------
+     Every size uses clamp() so we never jump at a breakpoint. */
+  --fz-eyebrow:   12px;
+  --fz-caption:   14px;
   --fz-small:     15px;
-  --fz-body:      18px;   /* primary reading size */
-  --fz-body-sm:   17px;   /* mobile body */
-  --fz-lede:      22px;
-  --fz-h4:        20px;
-  --fz-h3:        26px;
-  --fz-h2:        36px;
-  --fz-h1:        48px;
-  --fz-display:   64px;   /* hero only */
+  --fz-body:      clamp(16px, 0.95rem + 0.2vw, 18px);
+  --fz-body-sm:   clamp(15px, 0.9rem + 0.15vw, 17px);
+  --fz-lede:      clamp(18px, 1rem + 0.7vw, 22px);
+  --fz-h4:        clamp(17px, 1rem + 0.35vw, 20px);
+  --fz-h3:        clamp(20px, 1.1rem + 0.6vw, 26px);
+  --fz-h2:        clamp(32px, 1.5rem + 2.2vw, 56px);
+  --fz-h1:        clamp(44px, 2.4rem + 3.6vw, 84px);
+  --fz-display:   clamp(48px, 2.6rem + 3vw, 64px);
 
-  /* ---------- Type · Weights ---------- */
+  /* ---------- Weights ---------- */
   --fw-regular:   400;
   --fw-medium:    500;
   --fw-semibold:  600;
   --fw-bold:      700;
 
-  /* ---------- Type · Leading ---------- */
+  /* ---------- Leading ---------- */
   --lh-body:      1.6;
   --lh-heading:   1.15;
   --lh-tight:     1.05;
 
-  /* ---------- Type · Tracking ---------- */
+  /* ---------- Tracking ---------- */
   --tr-tight:    -0.02em;
   --tr-normal:    0;
   --tr-eyebrow:   0.12em;
@@ -86,15 +87,15 @@
   --s-10: 128px;
 
   /* ---------- Measure ---------- */
-  --measure-prose:  640px;   /* ~68ch body column */
-  --measure-wide:   960px;   /* two-col spread */
+  --measure-prose:  640px;
+  --measure-wide:   960px;
   --measure-full:  1200px;
 
   /* ---------- Radius (editorial = flat) ---------- */
-  --r-0:  0px;      /* cards, images, containers */
-  --r-1:  2px;      /* pills, buttons only */
+  --r-0:  0px;
+  --r-1:  2px;
 
-  /* ---------- Elevation — single shadow, used rarely ---------- */
+  /* ---------- Elevation ---------- */
   --shadow-nav:
     0 1px 3px rgba(28, 29, 31, 0.06),
     0 1px 2px rgba(28, 29, 31, 0.04);
@@ -111,7 +112,7 @@
 }
 
 /* ==========================================================================
-   Semantic element styles — drop-in usable
+   Semantic element styles
    ========================================================================== */
 
 html { background: var(--paper); color: var(--ink); }
@@ -126,11 +127,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-@media (max-width: 720px) {
-  body { font-size: var(--fz-body-sm); }
-}
-
-/* ---- Headings (sentence case — enforced by content, not CSS) ---- */
+/* Headings */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--sans);
   font-weight: var(--fw-semibold);
@@ -145,7 +142,7 @@ h2 { font-size: var(--fz-h2); }
 h3 { font-size: var(--fz-h3); }
 h4 { font-size: var(--fz-h4); }
 
-/* ---- Eyebrow label (SECTION 02 · THE PROJECT) ---- */
+/* Eyebrow */
 .eyebrow {
   font-family: var(--sans);
   font-size: var(--fz-eyebrow);
@@ -159,7 +156,6 @@ h4 { font-size: var(--fz-h4); }
   margin-bottom: var(--s-4);
 }
 
-/* ---- Lede (opening paragraph) ---- */
 .lede {
   font-family: var(--serif);
   font-size: var(--fz-lede);
@@ -167,13 +163,11 @@ h4 { font-size: var(--fz-h4); }
   color: var(--ink-80);
 }
 
-/* ---- Paragraph ---- */
 p {
   margin: 0 0 var(--s-5) 0;
   max-width: var(--measure-prose);
 }
 
-/* ---- Links ---- */
 a {
   color: var(--rideau);
   text-decoration: underline;
@@ -191,12 +185,11 @@ a:focus-visible {
   outline-offset: var(--focus-offset);
 }
 
-/* ---- Pull quote ---- */
 blockquote {
   font-family: var(--serif);
   font-style: italic;
-  font-size: 28px;
-  line-height: 1.4;
+  font-size: clamp(20px, 1.1rem + 0.8vw, 28px);
+  line-height: 1.5;
   color: var(--ink);
   border-left: 2px solid var(--rideau);
   padding: var(--s-2) 0 var(--s-2) var(--s-5);
@@ -212,7 +205,6 @@ blockquote cite {
   color: var(--ink-70);
 }
 
-/* ---- Caption / figcaption ---- */
 figcaption, .caption {
   font-family: var(--sans);
   font-size: var(--fz-caption);
@@ -221,7 +213,6 @@ figcaption, .caption {
   margin-top: var(--s-3);
 }
 
-/* ---- Source / credit line ---- */
 .source, .credit {
   font-family: var(--sans);
   font-size: var(--fz-eyebrow);
@@ -229,23 +220,19 @@ figcaption, .caption {
   font-style: normal;
 }
 
-/* ---- Mono (inline code / citation codes) ---- */
 code, kbd, samp, .mono {
   font-family: var(--mono);
   font-size: 0.9em;
 }
 
-/* ---- Hairline (section separator) ---- */
 hr {
   border: 0;
   border-top: 1px solid var(--ink-15);
   margin: var(--s-9) 0;
 }
 
-/* ---- Selection ---- */
 ::selection { background: var(--rideau-wash); color: var(--ink); }
 
-/* ---- Keyboard focus (global fallback) ---- */
 *:focus-visible {
   outline: var(--focus-ring);
   outline-offset: var(--focus-offset);

@@ -1,0 +1,21 @@
+---
+interface Props {
+  n: number | string;
+}
+const { n } = Astro.props;
+---
+<span class="sn">
+  <a
+    class="sn-marker"
+    href={"#sn-" + n}
+    data-sidenote-marker={n}
+    aria-expanded="false"
+    aria-controls={"sn-" + n}
+    aria-describedby={"sn-" + n}
+  >{n}</a><span
+    class="sn-body"
+    id={"sn-" + n}
+    role="note"
+    data-sidenote-body={n}
+  ><slot /></span>
+</span>
