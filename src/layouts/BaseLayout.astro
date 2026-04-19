@@ -9,6 +9,10 @@ const {
   title = 'At Least Play Baseball — a public record',
   description = "A single-page record of the public discourse around the proposed cricket pitch at Beryl Gaffney Park in Ottawa.",
 } = Astro.props;
+
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://atleastplaybaseball.com';
+const ogImage = `${siteUrl}/og-image.png`;
+const canonical = new URL(Astro.url.pathname, siteUrl).toString();
 ---
 <!doctype html>
 <html lang="en">
@@ -17,7 +21,26 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="At Least Play Baseball" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="A park, a pitch, and two very different records — a public record, Ottawa, 2026." />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content="A park, a pitch, and two very different records — a public record, Ottawa, 2026." />
   </head>
   <body>
     <div class="page">
