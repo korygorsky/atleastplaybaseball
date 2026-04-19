@@ -766,10 +766,9 @@ figcaption {
   margin: 10px 0 14px;
 }
 .sn-body::before {
-  content: counter(sn-counter, decimal) '. ';
+  content: attr(data-n) '. ';
   font-weight: 600; color: var(--ink);
 }
-.sn-body { counter-increment: sn-counter; }
 
 @media (min-width: 1080px) {
   /* Desktop: hidden by default, click-to-reveal as an inline disclosure.
