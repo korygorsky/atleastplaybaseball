@@ -1,21 +1,49 @@
 // Vercel serverless function — POST /api/corrections
 // Accepts { name?, email?, message, website? } and emails the site owner via Resend.
+// Rate-limited via Upstash Redis: 3 submissions per 10 min per IP + 60/hr global cap.
 // Env vars required (set in Vercel dashboard):
-//   RESEND_API_KEY   — Resend API token
-//   RECIPIENT_EMAIL  — where submissions are delivered
-//   SENDER_EMAIL     — optional; defaults to onboarding@resend.dev
+//   RESEND_API_KEY             — Resend API token
+//   RECIPIENT_EMAIL            — where submissions are delivered
+//   SENDER_EMAIL               — optional; defaults to onboarding@resend.dev
+//   UPSTASH_REDIS_REST_URL     — Upstash Redis REST URL
+//   UPSTASH_REDIS_REST_TOKEN   — Upstash Redis REST token
+
+import { Ratelimit } from '@upstash/ratelimit';
+import { Redis } from '@upstash/redis';
 
 export const config = { runtime: 'edge' };
+
+const redis = Redis.fromEnv();
+
+const perIpLimiter = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(3, '10 m'),
+  prefix: 'corr:ip',
+  analytics: false,
+});
+
+const globalLimiter = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(60, '1 h'),
+  prefix: 'corr:global',
+  analytics: false,
+});
 
 const MAX_MESSAGE_LEN = 5000;
 const MAX_NAME_LEN = 120;
 const MAX_EMAIL_LEN = 200;
 
-function json(body: unknown, status = 200) {
+function json(body: unknown, status = 200, headers: Record<string, string> = {}) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...headers },
   });
+}
+
+function clientIp(req: Request) {
+  const fwd = req.headers.get('x-forwarded-for');
+  if (fwd) return fwd.split(',')[0].trim();
+  return req.headers.get('x-real-ip') || 'unknown';
 }
 
 function escapeHtml(s: string) {
@@ -29,6 +57,20 @@ function escapeHtml(s: string) {
 
 export default async function handler(req: Request) {
   if (req.method !== 'POST') return json({ ok: false, error: 'method_not_allowed' }, 405);
+
+  // Global cap first — cheapest guardrail.
+  const gl = await globalLimiter.limit('all');
+  if (!gl.success) {
+    const retry = Math.max(1, Math.ceil((gl.reset - Date.now()) / 1000));
+    return json({ ok: false, error: 'rate_limited_global' }, 429, { 'Retry-After': String(retry) });
+  }
+
+  const ip = clientIp(req);
+  const rl = await perIpLimiter.limit(ip);
+  if (!rl.success) {
+    const retry = Math.max(1, Math.ceil((rl.reset - Date.now()) / 1000));
+    return json({ ok: false, error: 'rate_limited' }, 429, { 'Retry-After': String(retry) });
+  }
 
   let body: Record<string, unknown>;
   try {

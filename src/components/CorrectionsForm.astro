@@ -85,6 +85,15 @@
       if (res.ok && data.ok) {
         form.reset();
         setStatus('Thank you — the message was sent.', 'ok');
+      } else if (res.status === 429) {
+        const retryHdr = res.headers.get('Retry-After');
+        const mins = retryHdr ? Math.max(1, Math.ceil(parseInt(retryHdr, 10) / 60)) : null;
+        setStatus(
+          mins
+            ? `Too many submissions from this connection. Please try again in about ${mins} minute${mins === 1 ? '' : 's'}.`
+            : 'Too many submissions. Please try again shortly.',
+          'err'
+        );
       } else {
         setStatus('Something went wrong. Please try again shortly.', 'err');
       }
