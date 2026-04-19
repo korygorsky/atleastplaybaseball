@@ -31,3 +31,6 @@ dist/
 *.log
 .cache/
 .tmp/
+
+# Raw data dumps (regenerate into src/data/)
+ottawa.raw.json

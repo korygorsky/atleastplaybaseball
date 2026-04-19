@@ -1,0 +1,259 @@
+---
+import data from '../data/ottawa.json';
+const diamondCount = data.diamonds.length;
+const pitchCount = data.pitches.length;
+---
+<figure class="ottawa-map map-figure">
+  <div class="om-head">
+    <div class="om-title">Baseball diamonds vs. cricket pitches in Ottawa</div>
+    <div class="om-toggles" role="group" aria-label="Toggle map layers" data-map-toggles>
+      <button type="button" data-layer="diamonds" aria-pressed="true">
+        <span class="om-dot om-dot-diamond"></span>
+        Baseball diamonds <span class="om-count">{diamondCount}</span>
+      </button>
+      <button type="button" data-layer="pitches" aria-pressed="true">
+        <span class="om-dot om-dot-pitch"></span>
+        Cricket pitches <span class="om-count">{pitchCount}</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="om-canvas-wrap">
+    <canvas
+      data-ottawa-map
+      data-payload={JSON.stringify(data)}
+      width="960"
+      height="720"
+      aria-label={`Map of Ottawa showing ${diamondCount} baseball and softball diamonds and ${pitchCount} cricket pitches`}
+    ></canvas>
+  </div>
+
+  <figcaption>
+    Sources: OpenStreetMap (<code>leisure=pitch</code>, <code>sport=baseball|softball|cricket</code>) within the City of Ottawa boundary. Data retrieved {data.generated.slice(0, 10)}.
+  </figcaption>
+</figure>
+
+<script>
+  type Pt = [number, number];
+  type Line = Pt[];
+  type Dot = { c: Pt; n?: string };
+  type Payload = {
+    bbox: [number, number, number, number];
+    boundary: Line[];
+    rivers: { name: string; kind: string; line: Line }[];
+    diamonds: Dot[];
+    pitches: Dot[];
+  };
+
+  function initOttawaMap(canvas: HTMLCanvasElement) {
+    const raw = canvas.getAttribute('data-payload');
+    if (!raw) return;
+    const data: Payload = JSON.parse(raw);
+
+    const fig = canvas.closest('.ottawa-map');
+    const toggles = fig?.querySelector<HTMLElement>('[data-map-toggles]');
+
+    let showDiamonds = true;
+    let showPitches = true;
+
+    const ink = '#1C1D1F';
+    const inkSoft = '#55585D';
+    const water = '#7A98A3';
+    const boundaryFill = '#EFEBE2';
+    const diamondColor = '#B8623B'; // baseball — warm terracotta (matches "coded" pill warmth)
+    const pitchColor = '#3E6B7A';   // cricket — Rideau blue (site accent)
+
+    function project(lon: number, lat: number, W: number, H: number) {
+      const [minX, minY, maxX, maxY] = data.bbox;
+      const pad = 24;
+      const latMid = (minY + maxY) / 2;
+      const sx = Math.cos(latMid * Math.PI / 180);
+      const dx = (maxX - minX) * sx;
+      const dy = (maxY - minY);
+      const scale = Math.min((W - pad * 2) / dx, (H - pad * 2) / dy);
+      const ox = (W - dx * scale) / 2;
+      const oy = (H - dy * scale) / 2;
+      const x = ox + (lon - minX) * sx * scale;
+      const y = oy + (maxY - lat) * scale; // flip Y
+      return [x, y] as Pt;
+    }
+
+    // Deterministic jitter so the stroke looks hand-drawn but doesn't dance on resize.
+    function hash(i: number, j: number) {
+      let h = (i * 374761393 + j * 668265263) | 0;
+      h = (h ^ (h >>> 13)) * 1274126177;
+      return ((h ^ (h >>> 16)) >>> 0) / 4294967295;
+    }
+
+    function drawPath(
+      ctx: CanvasRenderingContext2D,
+      pts: Pt[],
+      W: number,
+      H: number,
+      opts: { close?: boolean; jitter?: number; seed?: number } = {}
+    ) {
+      if (pts.length < 2) return;
+      const { close = false, jitter = 0.9, seed = 0 } = opts;
+      ctx.beginPath();
+      for (let i = 0; i < pts.length; i++) {
+        const [lon, lat] = pts[i];
+        let [x, y] = project(lon, lat, W, H);
+        const jx = (hash(seed, i * 2) - 0.5) * jitter;
+        const jy = (hash(seed, i * 2 + 1) - 0.5) * jitter;
+        x += jx; y += jy;
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      if (close) ctx.closePath();
+      ctx.stroke();
+    }
+
+    // True aspect ratio of Ottawa at its latitude (tighter than 1.5:1).
+    const [bminX, bminY, bmaxX, bmaxY] = data.bbox;
+    const latMidBB = (bminY + bmaxY) / 2;
+    const bboxAR = ((bmaxX - bminX) * Math.cos(latMidBB * Math.PI / 180)) / (bmaxY - bminY);
+    // Pad vertically so the boundary isn't kissing the edges.
+    const canvasAR = bboxAR * 0.95;
+
+    function render() {
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      const wrap = canvas.parentElement as HTMLElement;
+      const wrapW = wrap?.clientWidth || canvas.clientWidth || 960;
+      const cssW = Math.max(280, wrapW);
+      const cssH = Math.round(cssW / canvasAR);
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = cssW * dpr;
+      canvas.height = cssH * dpr;
+      canvas.style.height = cssH + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, cssW, cssH);
+
+      // Boundary fill (very subtle, so the dots read on it)
+      if (data.boundary[0]) {
+        ctx.beginPath();
+        for (let i = 0; i < data.boundary[0].length; i++) {
+          const [lon, lat] = data.boundary[0][i];
+          const [x, y] = project(lon, lat, cssW, cssH);
+          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.fillStyle = boundaryFill;
+        ctx.fill();
+      }
+
+      // Rivers — under the boundary stroke
+      ctx.strokeStyle = water;
+      ctx.lineWidth = 1.1;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      data.rivers.forEach((r, idx) => {
+        drawPath(ctx, r.line, cssW, cssH, { jitter: 0.5, seed: 100 + idx });
+      });
+
+      // Boundary stroke — hand-drawn (double pass with slight offset)
+      ctx.strokeStyle = ink;
+      ctx.lineWidth = 1.1;
+      data.boundary.forEach((ring, idx) => {
+        drawPath(ctx, ring, cssW, cssH, { close: true, jitter: 1.1, seed: idx });
+      });
+      ctx.strokeStyle = inkSoft;
+      ctx.lineWidth = 0.6;
+      data.boundary.forEach((ring, idx) => {
+        drawPath(ctx, ring, cssW, cssH, { close: true, jitter: 1.6, seed: idx + 7 });
+      });
+
+      // Dots
+      function drawDots(dots: Dot[], color: string, r: number) {
+        ctx.fillStyle = color;
+        ctx.strokeStyle = ink;
+        ctx.lineWidth = 0.6;
+        for (const d of dots) {
+          const [x, y] = project(d.c[0], d.c[1], cssW, cssH);
+          ctx.beginPath();
+          ctx.arc(x, y, r, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+        }
+      }
+
+      // Draw the less-numerous layer on top so it doesn't get buried.
+      if (showDiamonds) drawDots(data.diamonds, diamondColor, 3.2);
+      if (showPitches) drawDots(data.pitches, pitchColor, 4.2);
+    }
+
+    toggles?.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-layer]');
+      if (!btn) return;
+      const layer = btn.dataset.layer;
+      const pressed = btn.getAttribute('aria-pressed') === 'true';
+      btn.setAttribute('aria-pressed', String(!pressed));
+      if (layer === 'diamonds') showDiamonds = !pressed;
+      if (layer === 'pitches') showPitches = !pressed;
+      render();
+    });
+
+    let resizeT: number | undefined;
+    const schedule = () => {
+      window.clearTimeout(resizeT);
+      resizeT = window.setTimeout(render, 120);
+    };
+    window.addEventListener('resize', schedule);
+    if ('ResizeObserver' in window && canvas.parentElement) {
+      new ResizeObserver(schedule).observe(canvas.parentElement);
+    }
+
+    render();
+  }
+
+  document.querySelectorAll<HTMLCanvasElement>('[data-ottawa-map]').forEach(initOttawaMap);
+</script>
+
+<style>
+  .ottawa-map { margin: 32px 0; }
+  .om-head {
+    display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: baseline;
+    justify-content: space-between; margin-bottom: 16px;
+  }
+  .om-title {
+    font-family: var(--sans); font-size: 13px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-70);
+  }
+  .om-toggles { display: flex; gap: 8px; flex-wrap: wrap; }
+  .om-toggles button {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--sans); font-size: 13px;
+    padding: 6px 12px;
+    background: var(--paper); color: var(--ink-70);
+    border: 1px solid var(--ink-15); border-radius: 999px;
+    cursor: pointer;
+    transition: background 120ms, color 120ms, border-color 120ms, opacity 120ms;
+  }
+  .om-toggles button:hover { border-color: var(--ink-40); }
+  .om-toggles button[aria-pressed="false"] {
+    opacity: 0.5; text-decoration: line-through;
+  }
+  .om-toggles button:focus-visible {
+    outline: 2px solid var(--rideau); outline-offset: 2px;
+  }
+  .om-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    border: 1px solid var(--ink-80); flex-shrink: 0;
+  }
+  .om-dot-diamond { background: #B8623B; }
+  .om-dot-pitch { background: #3E6B7A; }
+  .om-count {
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-60); font-size: 12px;
+  }
+  .om-canvas-wrap { width: 100%; max-width: 900px; margin: 0 auto; }
+  .ottawa-map canvas { width: 100%; height: auto; display: block; }
+  .ottawa-map figcaption {
+    font-family: var(--sans); font-size: 12px; color: var(--ink-60);
+    margin-top: 12px; line-height: 1.5;
+  }
+  .ottawa-map figcaption code {
+    font-family: ui-monospace, Menlo, monospace; font-size: 11px;
+    background: var(--ink-05); padding: 1px 5px; border-radius: 3px;
+  }
+</style>
