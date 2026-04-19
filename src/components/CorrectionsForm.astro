@@ -10,45 +10,91 @@
       This site is a public record. If something here is wrong, missing, or unfairly framed — including anything about the sport of cricket, the park, the quoted commenters, or the methodology — please say so. Substantive corrections with sources may be incorporated and, if you wish, credited.
     </p>
 
-    <form class="corr-form" data-corrections-form novalidate>
-      <div class="corr-row">
+    <div class="corr-stage" data-corr-stage>
+      <form class="corr-form" data-corrections-form novalidate>
+        <div class="corr-row">
+          <label class="corr-field">
+            <span>Name <span class="corr-opt">optional</span></span>
+            <input type="text" name="name" autocomplete="name" maxlength="120" />
+          </label>
+          <label class="corr-field">
+            <span>Email <span class="corr-opt">optional — for reply</span></span>
+            <input type="email" name="email" autocomplete="email" maxlength="200" />
+          </label>
+        </div>
+
         <label class="corr-field">
-          <span>Name <span class="corr-opt">optional</span></span>
-          <input type="text" name="name" autocomplete="name" maxlength="120" />
+          <span>Message</span>
+          <textarea name="message" rows="6" maxlength="5000" required placeholder="What should change, and why? If possible, include a source or link."></textarea>
         </label>
-        <label class="corr-field">
-          <span>Email <span class="corr-opt">optional — for reply</span></span>
-          <input type="email" name="email" autocomplete="email" maxlength="200" />
-        </label>
-      </div>
 
-      <label class="corr-field">
-        <span>Message</span>
-        <textarea name="message" rows="6" maxlength="5000" required placeholder="What should change, and why? If possible, include a source or link."></textarea>
-      </label>
+        <!-- Honeypot: real users leave this empty. Hidden from assistive tech. -->
+        <div class="corr-hp" aria-hidden="true">
+          <label>Website<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+        </div>
 
-      <!-- Honeypot: real users leave this empty. Hidden from assistive tech. -->
-      <div class="corr-hp" aria-hidden="true">
-        <label>Website<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
-      </div>
+        <div class="corr-footer">
+          <button type="submit" class="corr-submit">Send</button>
+          <span class="corr-status" data-corr-status role="status" aria-live="polite"></span>
+        </div>
+      </form>
 
-      <div class="corr-footer">
-        <button type="submit" class="corr-submit">Send</button>
-        <span class="corr-status" data-corr-status role="status" aria-live="polite"></span>
+      <div class="corr-thanks" data-corr-thanks hidden role="status" aria-live="polite">
+        <div class="corr-thanks-mark" aria-hidden="true">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 17l6 6 14-14" />
+          </svg>
+        </div>
+        <h3>Message received.</h3>
+        <p>
+          Thank you for taking the time. Submissions are read by a real person. If your note contains a factual correction with a verifiable source, it will be considered for the record — and, if you provided an email and wish to be credited, you'll hear back before anything is changed.
+        </p>
+        <p class="corr-thanks-meta">
+          Nothing else is done with your name or email.
+        </p>
+        <button type="button" class="corr-thanks-again" data-corr-reset>Send another</button>
       </div>
-    </form>
+    </div>
   </div>
 </section>
 
 <script>
+  const stage = document.querySelector<HTMLElement>('[data-corr-stage]');
   const form = document.querySelector<HTMLFormElement>('[data-corrections-form]');
   const status = document.querySelector<HTMLElement>('[data-corr-status]');
+  const thanks = document.querySelector<HTMLElement>('[data-corr-thanks]');
+  const resetBtn = document.querySelector<HTMLButtonElement>('[data-corr-reset]');
 
   function setStatus(msg: string, tone: 'idle' | 'ok' | 'err' = 'idle') {
     if (!status) return;
     status.textContent = msg;
     status.dataset.tone = tone;
   }
+
+  function showThanks() {
+    if (!stage || !form || !thanks) return;
+    stage.classList.add('is-sent');
+    // Wait for the form's fade-out transition before revealing the thanks block
+    // so they don't overlap visually.
+    window.setTimeout(() => {
+      form.hidden = true;
+      thanks.hidden = false;
+      // Scroll the thanks block into comfortable view.
+      thanks.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      // Give focus to the reset button for keyboard users.
+      resetBtn?.focus({ preventScroll: true });
+    }, 260);
+  }
+
+  function resetForm() {
+    if (!stage || !form || !thanks) return;
+    thanks.hidden = true;
+    form.hidden = false;
+    stage.classList.remove('is-sent');
+    form.querySelector<HTMLInputElement | HTMLTextAreaElement>('input[name="name"], input[name="email"], textarea[name="message"]')?.focus({ preventScroll: true });
+  }
+
+  resetBtn?.addEventListener('click', resetForm);
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -84,7 +130,8 @@
       const data = await res.json().catch(() => ({}));
       if (res.ok && data.ok) {
         form.reset();
-        setStatus('Thank you — the message was sent.', 'ok');
+        setStatus('', 'idle');
+        showThanks();
       } else if (res.status === 429) {
         const retryHdr = res.headers.get('Retry-After');
         const mins = retryHdr ? Math.max(1, Math.ceil(parseInt(retryHdr, 10) / 60)) : null;
@@ -130,9 +177,21 @@
     margin: 0 0 28px;
   }
 
-  .corr-form {
+  .corr-stage {
     max-width: var(--measure-prose);
+    position: relative;
+  }
+  .corr-form {
     display: flex; flex-direction: column; gap: 16px;
+    transition: opacity 220ms ease, transform 220ms ease;
+  }
+  .corr-stage.is-sent .corr-form {
+    opacity: 0;
+    transform: translateY(-6px);
+    pointer-events: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .corr-form { transition: none; }
   }
   .corr-row {
     display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
@@ -199,4 +258,63 @@
   }
   .corr-status[data-tone="ok"] { color: #4A5D44; }
   .corr-status[data-tone="err"] { color: #9A4B3B; }
+
+  .corr-thanks {
+    border-left: 3px solid var(--rideau);
+    padding: 24px 28px;
+    background: var(--rideau-wash);
+    animation: corr-thanks-in 360ms ease both;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .corr-thanks { animation: none; }
+  }
+  @keyframes corr-thanks-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .corr-thanks-mark {
+    color: var(--rideau-deep);
+    margin-bottom: 12px;
+  }
+  .corr-thanks h3 {
+    font-family: var(--serif-display);
+    font-weight: 400;
+    font-size: clamp(22px, 1.1rem + 0.8vw, 28px);
+    line-height: 1.2;
+    color: var(--ink);
+    margin: 0 0 10px;
+  }
+  .corr-thanks p {
+    font-family: var(--serif);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink-80);
+    margin: 0 0 10px;
+  }
+  .corr-thanks-meta {
+    font-family: var(--sans) !important;
+    font-size: 13px !important;
+    color: var(--ink-60) !important;
+    margin-top: 12px !important;
+  }
+  .corr-thanks-again {
+    font-family: var(--sans);
+    font-size: 13px; font-weight: 500;
+    color: var(--rideau-deep);
+    background: transparent;
+    border: 1px solid var(--rideau);
+    padding: 8px 14px;
+    border-radius: 2px;
+    margin-top: 16px;
+    cursor: pointer;
+    transition: background 120ms, color 120ms;
+  }
+  .corr-thanks-again:hover {
+    background: var(--rideau);
+    color: var(--paper);
+  }
+  .corr-thanks-again:focus-visible {
+    outline: 2px solid var(--rideau);
+    outline-offset: 2px;
+  }
 </style>
