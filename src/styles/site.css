@@ -772,28 +772,9 @@ figcaption {
 .sn-body { counter-increment: sn-counter; }
 
 @media (min-width: 1080px) {
-  /* Desktop: float right in the negative margin, always visible */
-  .sn-body {
-    float: right; clear: right;
-    width: 240px;
-    max-height: none;
-    opacity: 1;
-    padding: 0 0 0 12px;
-    margin: 0 -280px 14px 0;
-    border-left: 1px solid var(--ink-15);
-    background: transparent;
-    font-size: 13px;
-    overflow: visible;
-    transition: background var(--dur-hover) var(--ease-out);
-  }
-  .sn-body[data-open="true"] {
-    background: var(--paper-sunk);
-    padding: 4px 8px 4px 12px;
-    margin: 0 -280px 14px 0;
-  }
-  .sn-marker { color: var(--ink-70); }
-  .sn-marker:hover,
-  .sn-marker[aria-expanded="true"] { color: var(--rideau); }
+  /* Desktop: hidden by default, click-to-reveal as an inline disclosure.
+     Consistent with mobile — never shows until a user asks for it. */
+  .sn-marker { color: var(--rideau); }
 }
 
 /* ---------- Print ---------- */
