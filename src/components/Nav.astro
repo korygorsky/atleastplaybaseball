@@ -14,11 +14,33 @@ const sections: [string, string][] = [
 <nav class="nav" aria-label="Section navigation" data-nav>
   <div class="nav-inner">
     <a class="nav-mark" href="#top">The Gaffney Park record</a>
+
     <div class="nav-chips" data-nav-chips>
       {sections.map(([id, label]) => (
         <a href={"#" + id} class="chip" data-section={id}>{label}</a>
       ))}
     </div>
+
+    <button
+      class="nav-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="nav-panel"
+      aria-label="Open navigation menu"
+      data-nav-toggle
+    >
+      <span class="nav-toggle-label" data-nav-toggle-label>Menu</span>
+      <span class="nav-toggle-icon" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </span>
+    </button>
   </div>
+
+  <div class="nav-panel" id="nav-panel" data-nav-panel hidden>
+    {sections.map(([id, label]) => (
+      <a href={"#" + id} class="nav-panel-link" data-section={id}>{label}</a>
+    ))}
+  </div>
+
   <div class="nav-progress" aria-hidden="true" data-nav-progress></div>
 </nav>

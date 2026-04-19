@@ -8,19 +8,17 @@ inject();
 function initNav() {
   const nav = document.querySelector<HTMLElement>('[data-nav]');
   const progress = document.querySelector<HTMLElement>('[data-nav-progress]');
-  const chipsEl = document.querySelector<HTMLElement>('[data-nav-chips]');
   const chips = Array.from(document.querySelectorAll<HTMLAnchorElement>('.chip[data-section]'));
+  const panel = document.querySelector<HTMLElement>('[data-nav-panel]');
+  const panelLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.nav-panel-link[data-section]'));
+  const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
   if (!nav) return;
 
   const ids = ['park', 'project', 'demand', 'concerns', 'comments', 'precedent', 'questions', 'about', 'sources'];
-  const chipByIdMap = new Map<string, HTMLAnchorElement>();
-  chips.forEach((c) => {
-    const id = c.dataset.section;
-    if (id) chipByIdMap.set(id, c);
-  });
 
   const setActive = (id: string) => {
     chips.forEach((c) => c.classList.toggle('active', c.dataset.section === id));
+    panelLinks.forEach((l) => l.classList.toggle('active', l.dataset.section === id));
   };
 
   const obs = new IntersectionObserver(
@@ -48,14 +46,37 @@ function initNav() {
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  if (chipsEl) {
-    const updateChips = () => {
-      const atEnd = chipsEl.scrollLeft + chipsEl.clientWidth >= chipsEl.scrollWidth - 2;
-      chipsEl.classList.toggle('at-end', atEnd);
+  /* Mobile nav panel */
+  if (toggle && panel) {
+    const closePanel = () => {
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Open navigation menu');
+      panel.setAttribute('hidden', '');
     };
-    chipsEl.addEventListener('scroll', updateChips, { passive: true });
-    window.addEventListener('resize', updateChips);
-    updateChips();
+    const openPanel = () => {
+      toggle.setAttribute('aria-expanded', 'true');
+      toggle.setAttribute('aria-label', 'Close navigation menu');
+      panel.removeAttribute('hidden');
+    };
+    toggle.addEventListener('click', () => {
+      const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+      if (isOpen) closePanel();
+      else openPanel();
+    });
+    panelLinks.forEach((link) => link.addEventListener('click', closePanel));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+        closePanel();
+        toggle.focus();
+      }
+    });
+    // Close if viewport grows past the mobile breakpoint
+    const mq = window.matchMedia('(min-width: 861px)');
+    const onMq = () => {
+      if (mq.matches) closePanel();
+    };
+    if (mq.addEventListener) mq.addEventListener('change', onMq);
+    else mq.addListener(onMq);
   }
 }
 
