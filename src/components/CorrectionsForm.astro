@@ -1,0 +1,193 @@
+---
+---
+<section id="corrections" class="corrections">
+  <div class="container">
+    <div class="eyebrow">Section 10 · Corrections</div>
+    <h2 class="corr-heading">
+      Comments, criticisms, and corrections.
+    </h2>
+    <p class="corr-lede">
+      This site is a public record. If something here is wrong, missing, or unfairly framed — including anything about the sport of cricket, the park, the quoted commenters, or the methodology — please say so. Substantive corrections with sources may be incorporated and, if you wish, credited.
+    </p>
+
+    <form class="corr-form" data-corrections-form novalidate>
+      <div class="corr-row">
+        <label class="corr-field">
+          <span>Name <span class="corr-opt">optional</span></span>
+          <input type="text" name="name" autocomplete="name" maxlength="120" />
+        </label>
+        <label class="corr-field">
+          <span>Email <span class="corr-opt">optional — for reply</span></span>
+          <input type="email" name="email" autocomplete="email" maxlength="200" />
+        </label>
+      </div>
+
+      <label class="corr-field">
+        <span>Message</span>
+        <textarea name="message" rows="6" maxlength="5000" required placeholder="What should change, and why? If possible, include a source or link."></textarea>
+      </label>
+
+      <!-- Honeypot: real users leave this empty. Hidden from assistive tech. -->
+      <div class="corr-hp" aria-hidden="true">
+        <label>Website<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+      </div>
+
+      <div class="corr-footer">
+        <button type="submit" class="corr-submit">Send</button>
+        <span class="corr-status" data-corr-status role="status" aria-live="polite"></span>
+      </div>
+    </form>
+  </div>
+</section>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-corrections-form]');
+  const status = document.querySelector<HTMLElement>('[data-corr-status]');
+
+  function setStatus(msg: string, tone: 'idle' | 'ok' | 'err' = 'idle') {
+    if (!status) return;
+    status.textContent = msg;
+    status.dataset.tone = tone;
+  }
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form) return;
+
+    const fd = new FormData(form);
+    const payload = {
+      name: String(fd.get('name') || ''),
+      email: String(fd.get('email') || ''),
+      message: String(fd.get('message') || ''),
+      website: String(fd.get('website') || ''),
+    };
+
+    if (payload.message.trim().length < 4) {
+      setStatus('Please write a message before sending.', 'err');
+      return;
+    }
+    if (payload.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
+      setStatus('That email doesn\u2019t look right.', 'err');
+      return;
+    }
+
+    const submit = form.querySelector<HTMLButtonElement>('.corr-submit');
+    if (submit) submit.disabled = true;
+    setStatus('Sending\u2026', 'idle');
+
+    try {
+      const res = await fetch('/api/corrections', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.ok) {
+        form.reset();
+        setStatus('Thank you — the message was sent.', 'ok');
+      } else {
+        setStatus('Something went wrong. Please try again shortly.', 'err');
+      }
+    } catch {
+      setStatus('Network error. Please try again shortly.', 'err');
+    } finally {
+      if (submit) submit.disabled = false;
+    }
+  });
+</script>
+
+<style>
+  .corrections {
+    padding: clamp(48px, 6vw, 96px) 0;
+    border-top: 1px solid var(--ink-15);
+    background: var(--paper);
+  }
+  .corr-heading {
+    font-family: var(--serif-display);
+    font-weight: 400;
+    font-size: clamp(28px, 1.3rem + 1.8vw, 40px);
+    line-height: 1.15;
+    letter-spacing: var(--tr-tight);
+    margin: 8px 0 16px;
+    color: var(--ink);
+    max-width: var(--measure-prose);
+  }
+  .corr-lede {
+    font-family: var(--serif);
+    font-size: var(--fz-body);
+    line-height: 1.6;
+    color: var(--ink-80);
+    max-width: var(--measure-prose);
+    margin: 0 0 28px;
+  }
+
+  .corr-form {
+    max-width: var(--measure-prose);
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .corr-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  }
+  @media (max-width: 640px) {
+    .corr-row { grid-template-columns: 1fr; }
+  }
+  .corr-field { display: flex; flex-direction: column; gap: 6px; font-family: var(--sans); }
+  .corr-field > span {
+    font-size: 12px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--ink-70);
+  }
+  .corr-opt {
+    font-weight: 400; text-transform: none; letter-spacing: 0;
+    color: var(--ink-60); margin-left: 6px;
+  }
+  .corr-field input,
+  .corr-field textarea {
+    font-family: var(--serif);
+    font-size: 16px; line-height: 1.5;
+    color: var(--ink);
+    background: var(--paper-sunk);
+    border: 1px solid var(--ink-15);
+    padding: 10px 12px;
+    border-radius: 2px;
+    transition: border-color 120ms, background 120ms;
+  }
+  .corr-field textarea { resize: vertical; min-height: 140px; }
+  .corr-field input:focus,
+  .corr-field textarea:focus {
+    outline: 2px solid var(--rideau);
+    outline-offset: 2px;
+    border-color: var(--rideau);
+    background: var(--paper);
+  }
+
+  .corr-hp {
+    position: absolute; left: -10000px; top: auto;
+    width: 1px; height: 1px; overflow: hidden;
+  }
+
+  .corr-footer {
+    display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
+    margin-top: 4px;
+  }
+  .corr-submit {
+    font-family: var(--sans); font-weight: 600;
+    font-size: 14px; letter-spacing: 0.02em;
+    padding: 10px 20px;
+    background: var(--rideau); color: var(--paper);
+    border: 1px solid var(--rideau);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 120ms, border-color 120ms;
+  }
+  .corr-submit:hover { background: var(--rideau-deep); border-color: var(--rideau-deep); }
+  .corr-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+  .corr-submit:focus-visible { outline: 2px solid var(--rideau); outline-offset: 2px; }
+
+  .corr-status {
+    font-family: var(--sans); font-size: 13px; line-height: 1.4;
+    color: var(--ink-70);
+  }
+  .corr-status[data-tone="ok"] { color: #4A5D44; }
+  .corr-status[data-tone="err"] { color: #9A4B3B; }
+</style>
