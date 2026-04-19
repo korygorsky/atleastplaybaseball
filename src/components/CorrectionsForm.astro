@@ -59,6 +59,8 @@
 </section>
 
 <script>
+  import { track } from '@vercel/analytics';
+
   const stage = document.querySelector<HTMLElement>('[data-corr-stage]');
   const form = document.querySelector<HTMLFormElement>('[data-corrections-form]');
   const status = document.querySelector<HTMLElement>('[data-corr-status]');
@@ -110,10 +112,12 @@
 
     if (payload.message.trim().length < 4) {
       setStatus('Please write a message before sending.', 'err');
+      track('corrections_blocked', { reason: 'validation' });
       return;
     }
     if (payload.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
       setStatus('That email doesn\u2019t look right.', 'err');
+      track('corrections_blocked', { reason: 'validation' });
       return;
     }
 
@@ -129,6 +133,7 @@
       });
       const data = await res.json().catch(() => ({}));
       if (res.ok && data.ok) {
+        track('corrections_submit', { has_email: payload.email ? 'yes' : 'no' });
         form.reset();
         setStatus('', 'idle');
         showThanks();
@@ -141,11 +146,15 @@
             : 'Too many submissions. Please try again shortly.',
           'err'
         );
+        const reason = data?.error === 'rate_limited_global' ? 'rate_limited_global' : 'rate_limited';
+        track('corrections_blocked', { reason });
       } else {
         setStatus('Something went wrong. Please try again shortly.', 'err');
+        track('corrections_blocked', { reason: 'server_error' });
       }
     } catch {
       setStatus('Network error. Please try again shortly.', 'err');
+      track('corrections_blocked', { reason: 'network' });
     } finally {
       if (submit) submit.disabled = false;
     }

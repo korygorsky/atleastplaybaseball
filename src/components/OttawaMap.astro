@@ -34,6 +34,8 @@ const pitchCount = data.pitches.length;
 </figure>
 
 <script>
+  import { track } from '@vercel/analytics';
+
   type Pt = [number, number];
   type Line = Pt[];
   type Dot = { c: Pt; n?: string };
@@ -191,6 +193,10 @@ const pitchCount = data.pitches.length;
       if (layer === 'diamonds') showDiamonds = !pressed;
       if (layer === 'pitches') showPitches = !pressed;
       render();
+      const layerName = layer === 'diamonds' ? 'baseball' : layer === 'pitches' ? 'cricket' : null;
+      if (layerName) {
+        track('map_layer_toggle', { layer: layerName, state: pressed ? 'off' : 'on' });
+      }
     });
 
     let resizeT: number | undefined;

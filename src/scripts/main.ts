@@ -1,4 +1,4 @@
-import { inject } from '@vercel/analytics';
+import { inject, track } from '@vercel/analytics';
 
 inject();
 
@@ -160,6 +160,34 @@ function initCommentsFilter() {
   });
 }
 
+/* ========================================================================
+   Analytics: nav section clicks + scroll depth thresholds
+   ======================================================================== */
+function initAnalyticsTracking() {
+  document.querySelectorAll<HTMLAnchorElement>('[data-section]').forEach((link) => {
+    link.addEventListener('click', () => {
+      const section = link.dataset.section;
+      if (section) track('nav_section_click', { section });
+    });
+  });
+
+  const thresholds = [25, 50, 75, 100] as const;
+  const fired = new Set<number>();
+  const check = () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    if (max <= 0) return;
+    const pct = Math.min(100, (window.scrollY / max) * 100);
+    for (const t of thresholds) {
+      if (!fired.has(t) && pct >= t) {
+        fired.add(t);
+        track('scroll_depth', { percent: String(t) });
+      }
+    }
+  };
+  window.addEventListener('scroll', check, { passive: true });
+  check();
+}
+
 /* ------------------------------------------------------------------------ */
 
 function init() {
@@ -167,6 +195,7 @@ function init() {
   initPermalinks();
   initSidenotes();
   initCommentsFilter();
+  initAnalyticsTracking();
 }
 
 if (document.readyState === 'loading') {
