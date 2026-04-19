@@ -95,6 +95,7 @@ function initPermalinks() {
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(url).catch(() => {});
       }
+      track('permalink_copy', { section: id });
       link.classList.add('copied');
       link.textContent = 'link copied';
       if (timer) window.clearTimeout(timer);
@@ -133,6 +134,7 @@ function initSidenotes() {
       marker.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
       if (!isOpen) {
         history.replaceState(null, '', '#sn-' + n);
+        track('sidenote_open', { n });
       }
     });
   });
@@ -156,6 +158,7 @@ function initCommentsFilter() {
         if (filter === 'all' || key === filter) g.removeAttribute('hidden');
         else g.setAttribute('hidden', '');
       });
+      track('comments_filter', { filter });
     });
   });
 }
