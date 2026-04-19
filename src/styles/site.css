@@ -127,9 +127,12 @@ body {
   .nav-panel:not([hidden]) { display: flex; }
 }
 @media (max-width: 480px) {
-  .nav-mark { display: none; }
+  .nav-mark { font-size: 15px; }
   .nav-toggle-label { display: none; }
   .nav-toggle { padding: 8px 10px; }
+}
+@media (max-width: 360px) {
+  .nav-mark { font-size: 14px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
