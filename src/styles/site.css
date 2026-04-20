@@ -747,6 +747,19 @@ figcaption {
 .sources-list .src-link strong { color: var(--paper); }
 .sources-list .src-link svg { color: var(--ink-40); }
 .sources-list .src-link:hover svg { color: #A9BBC2; }
+.sources-list .src-plain {
+  color: var(--ink-40);
+}
+.sources-list .src-plain strong { color: var(--ink-15); font-weight: 600; }
+.sources-list .src-archive {
+  font-size: 12px;
+  color: var(--ink-40);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: #3A3C40;
+  margin-left: 4px;
+}
+.sources-list .src-archive:hover { color: #A9BBC2; }
 
 .footer-line {
   margin-top: 80px; padding-top: 28px;
