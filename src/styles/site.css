@@ -510,6 +510,93 @@ figcaption {
   .by-numbers li { grid-template-columns: 1fr; gap: 8px; }
 }
 
+.by-numbers .corpus-other {
+  margin-top: 32px; padding-top: 24px;
+  border-top: 1px solid var(--ink-15);
+}
+
+.corpus-table {
+  margin: 0 0 28px;
+  overflow-x: auto;
+}
+.corpus-table table {
+  width: 100%; border-collapse: collapse;
+  font-family: var(--sans); font-size: 13px; line-height: 1.4;
+  color: var(--ink-80);
+}
+.corpus-table thead th {
+  text-align: right; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  font-size: 11px; color: var(--ink-60);
+  padding: 10px 8px; border-bottom: 2px solid var(--rideau);
+  white-space: nowrap;
+}
+.corpus-table thead th.src-col { text-align: left; }
+.corpus-table tbody th.src-col {
+  text-align: left; font-weight: 500;
+  color: var(--ink);
+  padding: 12px 8px 12px 0;
+  border-bottom: 1px solid var(--ink-15);
+  max-width: 280px; line-height: 1.35;
+}
+.corpus-table tbody td {
+  text-align: right; padding: 12px 8px;
+  border-bottom: 1px solid var(--ink-15);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+.corpus-table tbody td.pct-col { color: var(--rideau); }
+.corpus-table tbody td.pct-col strong { font-weight: 600; }
+.corpus-table tbody tr:last-child th,
+.corpus-table tbody tr:last-child td { border-bottom: 0; }
+
+.bn-finding {
+  font-family: var(--serif); font-size: clamp(16px, 0.95rem + 0.25vw, 18px);
+  line-height: 1.6; color: var(--ink-80);
+  margin: 28px 0 8px;
+  padding: 20px 22px;
+  background: var(--paper);
+  border-left: 3px solid var(--rideau);
+  max-width: 820px;
+}
+.bn-finding strong { color: var(--ink); font-weight: 600; }
+
+@media (max-width: 640px) {
+  .corpus-table { overflow-x: visible; }
+  .corpus-table table, .corpus-table thead, .corpus-table tbody,
+  .corpus-table tr, .corpus-table th, .corpus-table td {
+    display: block;
+  }
+  .corpus-table thead { display: none; }
+  .corpus-table tbody tr {
+    padding: 16px 0 12px;
+    border-top: 1px solid var(--ink-15);
+  }
+  .corpus-table tbody tr:first-child { border-top: 0; padding-top: 0; }
+  .corpus-table tbody th.src-col {
+    text-align: left; font-weight: 600; font-size: 14px;
+    color: var(--ink); padding: 0 0 12px;
+    border-bottom: 0; max-width: none; line-height: 1.4;
+  }
+  .corpus-table tbody td {
+    display: flex; align-items: baseline;
+    text-align: left; padding: 4px 0;
+    border-bottom: 0; font-size: 13px;
+  }
+  .corpus-table tbody td::before {
+    content: attr(data-label);
+    font-family: var(--sans); font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--ink-60);
+    min-width: 96px; margin-right: 12px;
+  }
+  .corpus-table tbody td.pct-col {
+    margin-top: 6px; padding-top: 8px;
+    border-top: 1px dashed var(--ink-15);
+    font-size: 15px;
+  }
+}
+
 /* ---------- Comment categories ---------- */
 .legend-grid {
   display: grid;

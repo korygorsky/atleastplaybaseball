@@ -7,9 +7,12 @@ const COMMENT_GROUPS = [
     label: 'Substantive',
     desc: 'Concerns that would exist regardless of which sport was being proposed.',
     quotes: [
-      { q: "2nd biggest country in the world and you mean to tell me we can't fit a dog park and a cricket pitch in the same city, insane.", src: "CTV News YouTube Comment" },
-      { q: "I don't own a dog but I dont agree with this, keep the dog park.", src: "CTV News YouTube Comment" },
-      { q: "What is the nearest alternative dog park? And what is the nearest alternative cricket pitch?", src: "CTV News YouTube Comment" },
+      { q: "Is anyone else seeing this? The city just ignored the Engage Ottawa survey results and moved forward with an announcement before the public even finished speaking. It's a clear sign that decisions are already made before the public has a chance to weigh in…", src: "Comment on Mayor Mark Sutcliffe's public Facebook post", note: "160 reactions — highest-voted comment in that thread" },
+      { q: "So the BG purchase is going to cost $1M and we're building 6 of them. Gee, maybe we should ask our homeless what else could be done with $6M. Or our seniors. Or our young families that can't find daycare.", src: "Comment on Councillor Carol Anne Meehan's public Facebook post", note: "20 reactions" },
+      { q: "2nd biggest country in the world and you mean to tell me we can't fit a dog park and a cricket pitch in the same city, insane.", src: "CTV News YouTube comment" },
+      { q: "I don't own a dog but I dont agree with this, keep the dog park.", src: "CTV News YouTube comment" },
+      { q: "What is the nearest alternative dog park? And what is the nearest alternative cricket pitch?", src: "CTV News YouTube comment" },
+      { q: "Nothing is wrong with a cricket pitch. What is wrong is taking a well used, nature area and plopping a cricket pitch in that area. … This is a well known turtle nesting area. There are plenty of undeveloped and underused areas where they could put the cricket pitch in barrhaven.", src: "r/ottawa — \u201CKeep Beryl Gaffney Park as is\u201D" },
     ],
   },
   {
@@ -17,7 +20,7 @@ const COMMENT_GROUPS = [
     label: 'Skeptical',
     desc: 'Practical opposition to the trade-off.',
     quotes: [
-      { q: "I do not support it. We are losing something no one wanted to lose for the sake of accommodation.", src: "CTV News YouTube Comment" },
+      { q: "I do not support it. We are losing something no one wanted to lose for the sake of accommodation.", src: "CTV News YouTube comment" },
     ],
   },
   {
@@ -25,9 +28,12 @@ const COMMENT_GROUPS = [
     label: 'Cultural',
     desc: "Frames cricket as culturally foreign without explicit ethnic or national-origin language.",
     quotes: [
-      { q: "At least play baseball.", src: "CTV News YouTube Comment", note: "3 upvotes" },
-      { q: "Eww cricket.", src: "CTV News YouTube Comment" },
-      { q: "Who they heck playing cricket in canada", src: "CTV News YouTube Comment" },
+      { q: "I do not know a single person who has ever played or been interested in Cricket other then the references to it in Hitchhikers Guide to the Galaxy books…", src: "Comment on Mayor Mark Sutcliffe's public Facebook post", note: "60 reactions — highest-voted Cultural item" },
+      { q: "No thx. How about some hockey slabs outdoors. Naw that would be beneficial for true Canadians.", src: "Comment on Mayor Mark Sutcliffe's public Facebook post", note: "16 reactions" },
+      { q: "NOT. ONE. TRUE. CANADIAN. WANTS. CRICKET. NOT. ONE.", src: "Comment on Mayor Mark Sutcliffe's public Facebook post" },
+      { q: "At least play baseball.", src: "CTV News YouTube comment", note: "3 upvotes" },
+      { q: "Eww cricket.", src: "CTV News YouTube comment" },
+      { q: "Who they heck playing cricket in canada", src: "CTV News YouTube comment" },
     ],
   },
   {
@@ -35,11 +41,16 @@ const COMMENT_GROUPS = [
     label: 'Coded',
     desc: "Explicit reference to ethnicity, national origin, immigration, or belonging.",
     quotes: [
-      { q: "And where are these cricket players from? I can only imagine...", src: "CTV News YouTube Comment" },
-      { q: "Look who is behind the Ottawa mayor indians figures Cricket is popular in india", src: "CTV News YouTube Comment" },
-      { q: "No way we're accomodating for foreign interest like this lmaooo", src: "CTV News YouTube Comment" },
-      { q: "This is not India", src: "Reply on Mayor Mark Sutcliffe's public Facebook post" },
-      { q: "Welcome to Canada, hockey dying while Cricket is Canada new sport.", src: "CTV News YouTube Comment" },
+      { q: "It doesnt make any sense why the Mayor is doing this. It doesnt make any sense. We need less indians. Less indian culture. He ignores the people and panders to the 3rd worlders. This has to stop.", src: "Comment on Mayor Mark Sutcliffe's public Facebook post", note: "6 reactions" },
+      { q: "Ban the indians not the dogs!", src: "Reply on Mayor Mark Sutcliffe's public Facebook post" },
+      { q: "With 60,000,000 new Indian Migrants proposed in the next five years, you are going to need more than five cricket pitches….", src: "Comment on Mayor Mark Sutcliffe's public Facebook post" },
+      { q: "A cricket pitch for who? Immigration cap and reform would have prevented this. … We are nothing more than tax slaves for foreigners.", src: "Comment on Councillor Carol Anne Meehan's public Facebook post", note: "8 reactions" },
+      { q: "Come on now, with the expected mass immigration from India … its only reasonable that we all give up our green space to keep the newcomers happy.", src: "Comment on Councillor Carol Anne Meehan's public Facebook post", note: "4 reactions" },
+      { q: "And where are these cricket players from? I can only imagine…", src: "CTV News YouTube comment" },
+      { q: "Look who is behind the Ottawa mayor indians figures Cricket is popular in india", src: "CTV News YouTube comment" },
+      { q: "No way we're accomodating for foreign interest like this lmaooo", src: "CTV News YouTube comment" },
+      { q: "This is not India", src: "Reply, CTV News YouTube comment thread" },
+      { q: "Welcome to Canada, hockey dying while Cricket is Canada new sport.", src: "CTV News YouTube comment" },
     ],
   },
   {
@@ -47,12 +58,25 @@ const COMMENT_GROUPS = [
     label: 'Pushback',
     desc: "Comments from other members of the public countering the above.",
     quotes: [
-      { q: "You need to educate yourself. Cricket is an English sport. It's official sport of United Kingdom.", src: "CTV News YouTube Comment", note: "13 upvotes — the highest-voted comment on the video" },
-      { q: "If there was no demand, they wouldn't create it. You might not like it but clearly it is a sport thats growing fast.", src: "CTV News YouTube Comment" },
+      { q: "On the surface this discussion is about a dog park and a cricket pitch. But reading through the comments here … people are openly talking about 'foreigners,' 'mass immigration,' and 'invaders.' That's not about park planning anymore. When posts frame a cricket pitch as something being imposed on 'the community,' it becomes a subtle dog whistle. … We should be able to talk about city planning without it becoming a proxy fight about who belongs in Ottawa.", src: "Comment on Councillor Carol Anne Meehan's public Facebook post", note: "10 reactions — addressed directly to the councillor" },
+      { q: "Can't help but feel racism is behind this petition.", src: "r/ottawa — \u201CKeep Beryl Gaffney Park as is\u201D", note: "+34 — the highest-voted identification of the pattern on Reddit" },
+      { q: "I think the real question is who do you think the people who oppose this view as the typical cricket player.", src: "r/ottawa — \u201CKeep Beryl Gaffney Park as is\u201D", note: "+24" },
+      { q: "We have hockey arenas, soccer pitches, baseball diamonds, tennis courts, pickleball courts, lawn bowling greens, swimming pools, golf courses…. what the hell is wrong with cricket pitches?", src: "Reply on Councillor Carol Anne Meehan's public Facebook post" },
+      { q: "You need to educate yourself. Cricket is an English sport. It's official sport of United Kingdom.", src: "CTV News YouTube comment", note: "13 upvotes — the highest-voted comment on the video" },
+      { q: "If there was no demand, they wouldn't create it. You might not like it but clearly it is a sport thats growing fast.", src: "CTV News YouTube comment" },
       { q: "The thinly veiled xenophobia and racism on the manotick Facebook pages about this is astounding.", src: "r/ottawa" },
     ],
   },
 ];
+
+// Only the two Facebook threads have a complete, item-level inventory classified
+// against the five categories. Other captures are narrated below the table.
+const CORPUS = [
+  { source: 'Mayor Mark Sutcliffe — public Facebook post (Mar 2026)', n: 295, sub: 97, skep: 119, cult: 29, cod: 27, push: 23 },
+  { source: 'Councillor Carol Anne Meehan — public Facebook post (Mar 2026)', n: 167, sub: 82, skep: 72, cult: 1, cod: 5, push: 7 },
+];
+
+const pct = (num: number, den: number) => den === 0 ? '—' : (num / den * 100).toFixed(1) + '%';
 ---
 <section id="comments">
   <div class="container">
@@ -77,30 +101,63 @@ const COMMENT_GROUPS = [
     </div>
 
     <div class="by-numbers">
-      <h3>By the numbers</h3>
+      <h3>The captured record</h3>
       <p class="bn-lead">
-        A sample of opposing comments on the CTV News YouTube video <em>&ldquo;Ottawa dog park to become new cricket pitch&rdquo;</em> was classified using the categories above. Of the opposing comments sampled:
+        547 public comments across five sources were captured verbatim and classified against the five categories above. Two of the five sources — both public Facebook posts made the same week about the same decision — have a complete item-level classification. The table below shows what that classification returned.
       </p>
-      <ul>
+
+      <div class="corpus-table" role="region" aria-label="Classified corpus breakdown">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col" class="src-col">Source (captured Mar–Apr 2026)</th>
+              <th scope="col">N</th>
+              <th scope="col">Sub.</th>
+              <th scope="col">Skep.</th>
+              <th scope="col">Cult.</th>
+              <th scope="col">Coded</th>
+              <th scope="col">Push.</th>
+              <th scope="col" class="pct-col">Cult.+Coded</th>
+            </tr>
+          </thead>
+          <tbody>
+            {CORPUS.map((r) => (
+              <tr>
+                <th scope="row" class="src-col">{r.source}</th>
+                <td data-label="N">{r.n}</td>
+                <td data-label="Sub.">{r.sub}</td>
+                <td data-label="Skep.">{r.skep}</td>
+                <td data-label="Cult.">{r.cult}</td>
+                <td data-label="Coded">{r.cod}</td>
+                <td data-label="Push.">{r.push}</td>
+                <td class="pct-col" data-label="Cult.+Coded"><strong>{pct(r.cult + r.cod, r.n)}</strong></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <p class="bn-finding">
+        <strong>Same park. Same week. Same decision. Different post-framing. Different opposition vocabulary.</strong> The Mayor's post announced the pitch as a win for a growing sport. The Councillor's post framed the same decision as a process betrayal. The volume of opposition was similar across the two threads; the share that used Cultural or Coded framing was not.
+      </p>
+
+      <ul class="corpus-other">
         <li>
-          <div class="bn-num">40–50%</div>
-          <div>used <strong>Cultural</strong> or <strong>Coded</strong> framing — i.e., invoked the sport's perceived foreignness, or referenced ethnicity, national origin, or immigration.</div>
+          <div class="bn-num">36</div>
+          <div>comments captured from the <strong>CTV News YouTube</strong> video <em>&ldquo;Ottawa dog park to become new cricket pitch&rdquo;</em> (the comment section the kicker quote at the top of this site is drawn from). The highest-voted comment on the video is a <strong>Pushback</strong> item — a viewer correcting the frame that cricket is a foreign sport.</div>
         </li>
         <li>
-          <div class="bn-num">50–60%</div>
-          <div>raised <strong>Substantive</strong> or <strong>Skeptical</strong> concerns about the amenity itself (dog park, trade-off, process).</div>
+          <div class="bn-num">41</div>
+          <div>comments captured from the <strong>r/ottawa</strong> thread <em>&ldquo;Keep Beryl Gaffney Park as is.&rdquo;</em> On this broader-Ottawa forum the opposition is thin and the racialized framing is near-zero; the thread's highest-voted comments overwhelmingly push back on the petition.</div>
         </li>
         <li>
-          <div class="bn-num">13</div>
-          <div>upvotes on the <strong>highest-voted comment</strong> on the video — which is in the <strong>Pushback</strong> category, a viewer correcting the frame that cricket is a foreign sport. More than any single coded or substantive comment in the thread.</div>
-        </li>
-        <li>
-          <div class="bn-num">Split</div>
-          <div>The pattern is not uniform across platforms. On r/ottawa, a broader-Ottawa forum, opposition comments lean heavily <strong>Substantive</strong>. In Facebook community groups geographically tied to the park, a Reddit commenter observed a very different mix — &ldquo;the thinly veiled xenophobia and racism on the manotick Facebook pages about this is astounding.&rdquo;</div>
+          <div class="bn-num">8</div>
+          <div>featured <strong>Change.org</strong> petition comments captured. The petition body, by design, avoids racialized framing; the featured supporter comments track that framing — amenity, habitat, and consultation.</div>
         </li>
       </ul>
+
       <p class="bn-footer">
-        The cultural/coded share of opposition commentary in the CTV video thread has no analogue in comparable amenity disputes this site has reviewed (including the 2022–2023 Manotick pickleball case covered in the next section). Full methodology and the verbatim classification are available in the methodology note at the bottom of this site.
+        Categorization follows the definitions in the legend above. Classification was applied to the language of each comment, not inferred from the commenter's identity. Edge cases exist — for example, one Sutcliffe-thread commenter self-identifies as Indian and opposes the pitch on location grounds while explicitly rejecting racialized framing. The verbatim capture, including every quote shown above and the items not reproduced here, is held locally for review. Facebook content inside closed community groups is reported by cross-platform observers to concentrate more racialized framing than either public post captured here; that content is not included above because a verbatim capture could not be made.
       </p>
     </div>
 
@@ -139,18 +196,18 @@ const COMMENT_GROUPS = [
         Categorizing a comment as <em>Coded</em> is a statement about the language of the comment — not the character of the person who wrote it. A reader can write &ldquo;this is not India&rdquo; for many reasons; the category label reflects how the sentence reads in the public record, nothing more.
       </p>
       <p>
-        The <em>Cultural</em> and <em>Coded</em> categories together outnumber the <em>Substantive</em> and <em>Skeptical</em> categories in the YouTube comment section of the CTV News coverage. The top-voted comment on that same video is, however, a <em>Pushback</em> comment. The public discourse is not uniform.
+        The public discourse is not uniform across platforms. Racialized framing is concentrated most heavily on Facebook threads attached to celebratory framings of the decision; it is sparse on threads attached to process-grievance framings; it is near-zero on r/ottawa. The top-voted comment in each captured thread is worth noting individually — on CTV News YouTube it is a <em>Pushback</em> comment; on the Mayor's Facebook post and on Councillor Meehan's Facebook post, it is a <em>Substantive</em> comment about consultation process. Loudness and representativeness are not the same thing.
       </p>
     </div>
 
     <div class="section-note" style="margin-top: 24px; background: var(--paper-sunk);">
       <h4>On what is not quoted here</h4>
       <p style="margin: 0;">
-        Additional comments consistent with the Coded category appear in Facebook community-group threads and on Mayor Sutcliffe's public Facebook posts. Many of those threads are behind a login wall or have been moderated since posting. Where a verbatim record could not be captured, those comments are <strong>not</strong> reproduced here, even where secondary reporting describes the pattern. This site quotes only what it can source.
+        Additional comments consistent with the <em>Coded</em> category are reported in Facebook community-group threads (Manotick, Barrhaven, Nepean) attached to this decision. Those threads are behind a login wall and a verbatim capture could not be made by this site; their contents are therefore <strong>not</strong> reproduced above, even where secondary reporting and cross-platform participants describe the pattern. This site quotes only what it can source.
       </p>
     </div>
 
-    <div class="src">Sources: CTV News YouTube — &ldquo;Ottawa dog park to become new cricket pitch,&rdquo; comment section; r/ottawa — &ldquo;Keep Beryl Gaffney Park as is&rdquo;; Change.org petition comment thread; public Facebook comment threads on community group posts and on public posts by Mayor Mark Sutcliffe.</div>
+    <div class="src">Sources: CTV News YouTube — &ldquo;Ottawa dog park to become new cricket pitch,&rdquo; comment section; r/ottawa — &ldquo;Keep Beryl Gaffney Park as is&rdquo;; Change.org petition comment thread (featured comments); Mayor Mark Sutcliffe's public Facebook post announcing the cricket-pitch program (March 2026); Councillor Carol Anne Meehan's public Facebook post on the same decision (March 2026).</div>
   </div>
 </section>
 
